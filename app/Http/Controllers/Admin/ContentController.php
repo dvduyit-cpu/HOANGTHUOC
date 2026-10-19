@@ -21,6 +21,7 @@ class ContentController extends Controller
 
         return view('admin.content.edit', [
             'settings' => SiteSetting::values(),
+            'images' => $section === 'trang-chu' ? MediaController::images() : collect(),
             'section' => $section,
             'sectionData' => $this->sections()[$section],
             'fields' => $this->fieldsFor($section),
@@ -36,6 +37,9 @@ class ContentController extends Controller
             $rules['settings.'.$key] = ['nullable', 'string', 'max:20000'];
         }
 
+        if ($section === 'trang-chu') {
+            $rules['settings.home_hero_image'] = ['nullable', 'string', \Illuminate\Validation\Rule::in(MediaController::images()->pluck('path')->all())];
+        }
         SiteSetting::putMany($request->validate($rules)['settings'] ?? []);
 
         return back()->with('success', 'Đã lưu thay đổi.');
@@ -56,6 +60,7 @@ class ContentController extends Controller
         $fields = $this->fields();
 
         return collect($this->sections()[$section]['fields'])
+            ->reject(fn (string $key) => str_ends_with($key, '_en'))
             ->mapWithKeys(fn (string $key) => [$key => $fields[$key]])
             ->all();
     }

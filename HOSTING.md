@@ -1,5 +1,34 @@
 # Đưa website lên hosting
 
+## Nhập toàn bộ dữ liệu hiện tại
+
+Gói đã xuất nằm ở `storage/app/private/deployment/website.json`, gồm tài khoản (mật khẩu băm), quyền, cấu hình, nội dung, tin tuyển dụng, bài viết, hồ sơ ứng tuyển và các tệp ảnh/CV. Giữ gói ngoài thư mục `public`.
+
+Upload mã nguồn và gói này lên host. Điền `.env` cho database MySQL **mới, trống**, tên miền và SMTP, sau đó chạy:
+
+```bash
+php artisan optimize:clear
+php artisan key:generate
+php artisan migrate --force
+php artisan website:transfer import
+php artisan storage:link
+php artisan optimize
+```
+
+Chỉ chạy `key:generate` khi cài mới; giữ nguyên khóa nếu host đã có ứng dụng đang sử dụng. **Không chạy `db:seed` trước khi nhập gói.** Đăng nhập bằng tài khoản và mật khẩu đang dùng ở bản hiện tại. Lệnh nhập dừng nếu các bảng dữ liệu đã có nội dung hoặc tệp đích khác nội dung, không ghi đè.
+
+Ảnh và CV được khôi phục từ gói vào storage; chúng vẫn là tệp, database lưu đường dẫn. Giao diện và dòng “Phát triển web Đặng Việt Duy” cố định nằm trong mã nguồn. Không nhập sessions, cache, hàng đợi hay lịch sử đăng nhập.
+
+Để xuất lại sau khi thay đổi dữ liệu trên máy hiện tại:
+
+```bash
+php artisan website:transfer export
+```
+
+Sau khi nhập thành công, xóa gói `storage/app/private/deployment/website.json` trên host. Gói có dữ liệu tài khoản và hồ sơ ứng viên, chỉ chuyển qua kênh riêng.
+
+## Cài mới với dữ liệu mẫu
+
 Hosting cần PHP 8.3+, các extension Laravel yêu cầu và PDO MySQL, MySQL/MariaDB.
 
 1. Upload mã nguồn và `vendor` (hoặc chạy `composer install --no-dev --optimize-autoloader` trên host). Không upload `.git`, `laravel-base`, backup ZIP và `.env` máy cá nhân.

@@ -5,14 +5,9 @@
     if (!homeLink || !careersLink) return;
 
     const updateNavigation = () => {
-        if (window.location.pathname === new URL(homeLink.href).pathname) {
-            const careersSelected = window.location.hash === new URL(careersLink.href).hash;
-            homeLink.classList.toggle('active', !careersSelected);
-            careersLink.classList.toggle('active', careersSelected);
-        }
         document.querySelectorAll('.primary-nav a').forEach(link => {
             if (link.classList.contains('active')) {
-                link.setAttribute('aria-current', link === careersLink && window.location.hash ? 'location' : 'page');
+                link.setAttribute('aria-current', 'page');
             } else {
                 link.removeAttribute('aria-current');
             }

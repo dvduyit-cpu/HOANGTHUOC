@@ -5,7 +5,7 @@
 
 @section('content')
 <section class="container section new-job-page">
-    <a class="back" href="{{ route('home') }}">← {{ $locale === 'en' ? 'All jobs' : 'Tất cả việc làm' }}</a>
+    <a class="back" href="{{ route('jobs.index') }}">← {{ $locale === 'en' ? 'All jobs' : 'Tất cả việc làm' }}</a>
 
     <div class="job-layout">
         <article class="card detail-card">

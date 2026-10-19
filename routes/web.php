@@ -17,6 +17,7 @@ use App\Http\Controllers\NewsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/tuyen-dung', [JobController::class, 'index'])->name('jobs.index');
 Route::view('/gioi-thieu', 'pages.about')->name('about');
 Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
@@ -41,6 +42,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,editor']
     Route::get('/', DashboardController::class)->name('dashboard');
     Route::resource('jobs', AdminJobController::class)->except('show')->middleware('permission:jobs');
     Route::resource('news', AdminNewsController::class)->except('show')->middleware('permission:news');
+    Route::get('kho-anh', [\App\Http\Controllers\Admin\MediaController::class, 'index'])->middleware('permission:content')->name('media.index');
+    Route::post('kho-anh', [\App\Http\Controllers\Admin\MediaController::class, 'store'])->middleware('permission:content')->name('media.store');
+    Route::delete('kho-anh', [\App\Http\Controllers\Admin\MediaController::class, 'destroy'])->middleware('permission:content')->name('media.destroy');
     Route::get('noi-dung', [ContentController::class, 'index'])->middleware('permission:content')->name('content.index');
     Route::get('noi-dung/{section}', [ContentController::class, 'edit'])->middleware('permission:content')->name('content.edit');
     Route::put('noi-dung/{section}', [ContentController::class, 'update'])->middleware('permission:content')->name('content.update');

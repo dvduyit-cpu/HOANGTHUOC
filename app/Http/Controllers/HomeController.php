@@ -3,27 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use Illuminate\Http\Request;
+use App\Models\News;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): View
     {
-        $keyword = trim((string) $request->query('q'));
-
-        $jobs = Job::public()
-            ->when($keyword, function ($query) use ($keyword) {
-                $query->where(function ($q) use ($keyword) {
-                    $q->where('title', 'like', "%{$keyword}%")
-                        ->orWhere('location', 'like', "%{$keyword}%")
-                        ->orWhere('summary', 'like', "%{$keyword}%");
-                });
-            })
-            ->latest('published_at')
-            ->paginate(9)
-            ->withQueryString();
-
-        return view('home', compact('jobs', 'keyword'));
+        return view('home', [
+            'openPositions' => Job::public()->count(),
+            'latestNews' => News::public()->latest('published_at')->limit(2)->get(),
+        ]);
     }
 }

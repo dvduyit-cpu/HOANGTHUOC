@@ -1,0 +1,28 @@
+/* Motion is progressive: content stays visible when JavaScript is unavailable. */
+main{animation:site-enter .4s ease-out both}
+@keyframes site-enter{from{opacity:.7}to{opacity:1}}
+.site-header{transition:box-shadow .25s ease,background-color .25s ease}
+.site-header.is-scrolled{background:#fffffff5;box-shadow:0 5px 24px #0d273a14}
+.site-reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.65,.3,1);transition-delay:var(--reveal-delay,0ms)}
+.site-reveal.is-visible,.site-reveal:focus-within{opacity:1;transform:none}
+.hp-inline-link span,.hp-text-link span,.hp-button span,.footer-contact-row svg{transition:transform .22s ease}
+.hp-inline-link:hover span,.hp-text-link:hover span,.hp-button:hover span{transform:translate(3px,-2px)}
+.footer-contact-row:hover svg{transform:translateY(-2px)}
+.btn,.outline-button,.hp-button{transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease}
+.btn:active,.outline-button:active,.hp-button:active{transform:translateY(1px)}
+input,textarea,select{transition:border-color .2s ease,box-shadow .2s ease}
+input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #267ca3;outline-offset:2px;box-shadow:0 0 0 4px #267ca312}
+@media(hover:hover) and (pointer:fine){
+    .job-card,.news-card{transition:transform .25s ease,box-shadow .25s ease}
+    .job-card:hover,.news-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px #103e5914}
+    .hp-values article{transition:background-color .25s ease}
+    .hp-values article:hover{background-color:#f7fafb}
+    .hp-button:hover,.btn:hover{box-shadow:0 7px 20px #103e591c}
+}
+@media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto!important}
+    main,.site-reveal{animation:none!important;opacity:1;transform:none!important}
+    *,*::before,*::after{transition:none!important;animation:none!important}
+    ::view-transition-old(root),::view-transition-new(root){animation:none!important}
+}
+@media print{.site-reveal{opacity:1;transform:none}}

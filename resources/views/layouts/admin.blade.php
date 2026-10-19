@@ -4,6 +4,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
+    @include('partials.favicon')
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Tổng quan') · {{ $adminName }}</title>
@@ -16,7 +17,6 @@
 <button class="sidebar-overlay" type="button" data-close-menu aria-label="Đóng menu" hidden></button>
 <aside class="sidebar" id="sidebar" aria-label="Menu quản trị">
     <a class="brand" href="{{ route('admin.dashboard') }}"><span class="brand-logo"><img src="{{ !empty($site['site_logo']) ? asset('storage/'.$site['site_logo']) : asset('images/hoang-thuoc-logo.png') }}" alt=""></span><span><strong>{{ $adminName }}</strong><small>QUẢN TRỊ WEBSITE</small></span></a>
-    <div class="workspace"><span class="workspace-icon"><x-admin-icon name="globe" /></span><span><strong>Website tuyển dụng</strong><small>Không gian quản trị</small></span><i></i></div>
     <nav aria-label="Điều hướng chính">
         <details class="nav-group" open><summary>NỘI DUNG & TUYỂN DỤNG <span>⌄</span></summary>
             @foreach([['admin.dashboard', 'dashboard', 'Tổng quan', 'admin.dashboard'], ['admin.jobs.index', 'briefcase', 'Tin tuyển dụng', 'admin.jobs.*'], ['admin.news.index', 'news', 'Tin tức & bài viết', 'admin.news.*'], ['admin.content.index', 'layers', 'Nội dung website', 'admin.content.*']] as [$route, $icon, $label, $pattern])
@@ -24,6 +24,7 @@
                 <a class="nav-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}" @if(request()->routeIs($pattern)) aria-current="page" @endif><x-admin-icon :name="$icon" /><span>{{ $label }}</span></a>
                 @endif
             @endforeach
+            @if(auth()->user()->hasPermission('content'))<a class="nav-link {{ request()->routeIs('admin.media.*') ? 'active' : '' }}" href="{{ route('admin.media.index') }}"><x-admin-icon name="folder" /><span>Kho hình ảnh</span></a>@endif
             @if(auth()->user()->hasPermission('applications'))<a class="nav-link {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}" @if(request()->routeIs('admin.applications.*')) aria-current="page" @endif><x-admin-icon name="folder" /><span>Hồ sơ ứng viên</span></a>@endif
         </details>
         @if(auth()->user()->isAdmin())
@@ -44,7 +45,7 @@
         @if(session('success'))<div class="alert success" role="status"><x-admin-icon name="check" /> {{ session('success') }}</div>@endif
         @if($errors->any())<div class="alert error" role="alert"><strong>Vui lòng kiểm tra lại thông tin:</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
         @yield('content')
-        <footer class="page-footer">{{ $site['admin_footer'] ?? 'Hoang Thuoc Medical · Hệ thống quản trị website tuyển dụng' }}</footer>
+        <footer class="page-footer">{{ $site['admin_footer'] ?? 'Hoang Thuoc Medical · Hệ thống quản trị website tuyển dụng' }}<br>@include('partials.developer-credit')</footer>
     </main>
 </div>
 </body>

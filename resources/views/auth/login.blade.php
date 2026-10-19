@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi">
 <head>
+    @include('partials.favicon')
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Đăng nhập · {{ $site['admin_name'] ?? 'Hoang Thuoc Medical' }}</title>
     <link rel="stylesheet" href="{{ asset('css/admin-workspace.css') }}?v={{ filemtime(public_path('css/admin-workspace.css')) }}">
@@ -24,6 +25,7 @@
         </form>
         <a class="back" href="{{ route('home') }}">← Quay về website</a>
         <div class="login-footer">{{ $site['admin_footer'] ?? 'Hoang Thuoc Medical · Hệ thống quản trị website tuyển dụng' }}</div>
+        <div class="login-footer">@include('partials.developer-credit')</div>
     </div></section>
 </main>
 </body>

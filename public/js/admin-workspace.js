@@ -97,3 +97,17 @@
         reader.readAsDataURL(file);
     });
 })();
+
+document.getElementById('hero-year')?.addEventListener('change', event => {
+    document.querySelectorAll('[data-media-year]').forEach(card => {
+        card.hidden = Boolean(event.target.value && card.dataset.mediaYear !== event.target.value);
+    });
+});
+
+document.querySelectorAll('[data-confirm-delete-media]').forEach(form => {
+    form.addEventListener('submit', event => {
+        if (!window.confirm('Xóa ảnh này khỏi kho? Thao tác này không thể hoàn tác.')) {
+            event.preventDefault();
+        }
+    });
+});
