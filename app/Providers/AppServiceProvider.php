@@ -25,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (! class_exists(\finfo::class)) {
+            // Local disk construction must also work on hosting without fileinfo.
+            // This fallback is for storage metadata, not upload validation.
+            \Illuminate\Support\Facades\Storage::extend('local', fn ($app, $config) => \App\Support\HostingFilesystem::make($config));
+        }
+
         RateLimiter::for('admin-login', function (Request $request) {
             return Limit::perMinute(5)->by(Str::transliterate(Str::lower((string) $request->input('email')).'|'.$request->ip()));
         });
