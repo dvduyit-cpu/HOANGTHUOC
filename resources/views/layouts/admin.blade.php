@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin-workspace.css') }}?v={{ filemtime(public_path('css/admin-workspace.css')) }}">
     <script defer src="{{ asset('js/admin-workspace.js') }}?v={{ filemtime(public_path('js/admin-workspace.js')) }}"></script>
     @include('partials.admin-theme')
+    <script defer src="{{ asset('js/password-toggle.js') }}?v={{ filemtime(public_path('js/password-toggle.js')) }}"></script>
 </head>
 <body class="admin-body" data-admin-user="{{ auth()->id() }}">
 <a class="skip-link" href="#main-content">Đến nội dung chính</a>

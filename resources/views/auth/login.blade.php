@@ -6,6 +6,7 @@
     <title>Đăng nhập · {{ $site['admin_name'] ?? 'Hoang Thuoc Medical' }}</title>
     <link rel="stylesheet" href="{{ asset('css/admin-workspace.css') }}?v={{ filemtime(public_path('css/admin-workspace.css')) }}">
     @include('partials.admin-theme')
+    <script defer src="{{ asset('js/password-toggle.js') }}?v={{ filemtime(public_path('js/password-toggle.js')) }}"></script>
 </head>
 <body>
 <main class="admin-login">

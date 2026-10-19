@@ -1,5 +1,9 @@
 (() => {
     'use strict';
+    // Recheck authentication when Back restores an old admin page from browser memory.
+    window.addEventListener('pageshow', event => {
+        if (event.persisted) window.location.reload();
+    });
     const root = document.documentElement;
     const toggle = document.querySelector('[data-toggle-menu]');
     const overlay = document.querySelector('[data-close-menu]');

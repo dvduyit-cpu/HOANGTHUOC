@@ -12,6 +12,12 @@ class SecurityHeaders
     {
         $response = $next($request);
 
+        if ($request->is('admin', 'admin/*')) {
+            $response->headers->set('Cache-Control', 'no-store, private, max-age=0, must-revalidate');
+            $response->headers->set('Pragma', 'no-cache');
+            $response->headers->set('Expires', '0');
+        }
+
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
