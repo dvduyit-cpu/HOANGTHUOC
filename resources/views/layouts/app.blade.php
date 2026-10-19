@@ -1,30 +1,12 @@
 <!doctype html>
-<html lang="vi">
+<html lang="{{ $locale ?? 'vi' }}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Tuyển dụng')</title>
-    <meta name="description" content="@yield('meta_description', 'Cơ hội việc làm và thông tin tuyển dụng')">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title', $site['site_title'] ?? 'Hoang Thuoc Medical')</title><meta name="description" content="@yield('meta_description', $site['site_description'] ?? 'Hoang Thuoc Medical Careers')">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}"><link rel="stylesheet" href="{{ asset('css/rebrand.css') }}"><link rel="stylesheet" href="{{ asset('css/typography-fix.css') }}"><link rel="stylesheet" href="{{ asset('css/brand-content.css') }}"><link rel="stylesheet" href="{{ asset('css/website-fix.css') }}"><link rel="stylesheet" href="{{ asset('css/polish.css') }}"><link rel="stylesheet" href="{{ asset('css/motion-fix.css') }}"><link rel="stylesheet" href="{{ asset('css/logo.css') }}">
 </head>
 <body>
-<header class="site-header">
-    <div class="container nav">
-        <a class="brand" href="{{ route('home') }}">TUYỂN DỤNG</a>
-        <nav>
-            <a href="{{ route('home') }}">Việc làm</a>
-            <a href="{{ route('contact.create') }}">Liên hệ</a>
-        </nav>
-    </div>
-</header>
-<main>
-    @if(session('success'))
-        <div class="container alert success">{{ session('success') }}</div>
-    @endif
-    @yield('content')
-</main>
-<footer class="footer">
-    <div class="container">© {{ date('Y') }} Tuyển dụng. Thông tin ứng viên được sử dụng cho mục đích tuyển dụng.</div>
-</footer>
-</body>
-</html>
+<header class="site-header"><div class="container nav nav-rebuild"><a class="brand brand-logo" href="{{ route('home') }}" aria-label="Hoang Thuoc Medical"><img class="company-logo" src="{{ !empty($site['site_logo']) ? asset('storage/'.$site['site_logo']) : asset('images/hoang-thuoc-logo.png') }}" alt="Hoang Thuoc Medical"><span class="visually-hidden">{{ $site['company_name'] ?? 'Hoang Thuoc Medical' }}</span></a><nav class="primary-nav" aria-label="Điều hướng chính"><a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ $locale === 'en' ? 'Home' : 'Trang chủ' }}</a><a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ $locale === 'en' ? 'About us' : 'Giới thiệu' }}</a><a class="{{ request()->routeIs('news*') ? 'active' : '' }}" href="{{ route('news') }}">{{ $locale === 'en' ? 'News' : 'Tin tức' }}</a><a class="{{ request()->routeIs('home', 'jobs.*') ? 'active' : '' }}" href="{{ route('home') }}#vi-tri-tuyen-dung">{{ $locale === 'en' ? 'Careers' : 'Tuyển dụng' }}</a><a class="{{ request()->routeIs('contact.*') ? 'active' : '' }}" href="{{ route('contact.create') }}">{{ $locale === 'en' ? 'Contact' : 'Liên hệ' }}</a><a class="locale-toggle" href="{{ route('locale.switch', ['locale' => $locale === 'vi' ? 'en' : 'vi', 'redirect' => url()->full()]) }}">{{ $locale === 'vi' ? 'EN' : 'VI' }}</a></nav></div></header>
+<main>@if(session('success'))<div class="container alert success">{{ session('success') }}</div>@endif @yield('content')</main>
+<footer class="footer"><div class="container footer-grid"><div><a class="brand brand-logo footer-brand" href="{{ route('home') }}"><img class="company-logo" src="{{ !empty($site['site_logo']) ? asset('storage/'.$site['site_logo']) : asset('images/hoang-thuoc-logo.png') }}" alt="Hoang Thuoc Medical"></a><p>{{ $site['footer_description_'.$locale] ?? '' }}</p></div><div><strong>{{ $locale === 'en' ? 'Recruitment contact' : 'Liên hệ tuyển dụng' }}</strong><p>{{ $site['company_email'] ?? 'phongnhansu@hoangthuocmedical.com' }}<br>{{ $site['company_phone'] ?? '' }}</p><p>{{ $site['company_legal_name'] ?? '' }}<br>{{ $locale === 'en' ? 'Tax ID' : 'Mã số thuế' }}: {{ $site['company_tax_id'] ?? '' }}</p></div><div><strong>{{ $locale === 'en' ? 'Address' : 'Địa chỉ' }}</strong><p>{{ $site['company_address_'.$locale] ?? '' }}</p></div></div><div class="container footer-bottom">© {{ date('Y') }} {{ $site['company_name'] ?? 'Hoang Thuoc Medical' }}. {{ $locale === 'en' ? 'Candidate information is confidential.' : 'Thông tin ứng viên được bảo mật.' }}</div></footer>
+</body></html>

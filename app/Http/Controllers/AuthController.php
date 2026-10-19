@@ -22,6 +22,8 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        $credentials['is_active'] = true;
+
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => 'Email hoặc mật khẩu không đúng.',

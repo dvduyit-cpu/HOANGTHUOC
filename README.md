@@ -20,22 +20,27 @@ Mô-đun tuyển dụng dành cho Laravel 13.
 - MySQL / MariaDB
 - SMTP (Gmail, Microsoft 365, mail hosting...)
 
-## Cài đặt nhanh
-1. Tạo dự án Laravel 13 mới:
-   ```bash
-   composer create-project laravel/laravel:^13.0 recruitment
-   cd recruitment
-   ```
-2. Sao chép toàn bộ file trong gói này vào đúng thư mục dự án (ghi đè file cùng tên nếu có).
-3. Thiết lập `.env` theo `.env.recruitment.example`.
-4. Chạy:
+## Chạy dự án đã hợp nhất
+Dự án chạy trực tiếp tại thư mục gốc `recruitment-laravel13`, gồm trang tuyển dụng, giới thiệu, tin tức, liên hệ, song ngữ và quản trị.
+
+```bash
+php artisan serve
+```
+
+Mở `http://localhost:8000`; quản trị tại `/admin/login`.
+
+## Cài đặt trên máy mới
+1. Chạy `composer install` tại thư mục gốc.
+2. Sao chép `.env.recruitment.example` thành `.env` và cấu hình database, SMTP, tài khoản quản trị.
+3. Chạy:
    ```bash
    php artisan key:generate
    php artisan migrate --seed
    php artisan storage:link
    php artisan serve
    ```
-5. Mở `/admin/login` để đăng nhập.
+
+Đã hợp nhất và xóa thư mục `laravel-base` cũ; chỉnh sửa và chạy ứng dụng ở thư mục gốc. File `merge-backup-*.zip` chứa bản mã nguồn gốc trước khi ghi đè. Các bản dự phòng có thể chứa dữ liệu riêng, cần lưu ngoài thư mục public.
 
 ## Tài khoản quản trị ban đầu
 Seeder lấy từ `.env`:

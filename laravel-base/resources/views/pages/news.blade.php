@@ -1,6 +1,0 @@
-@extends('layouts.app')
-@section('title', ($locale === 'en' ? 'News' : 'Tin tức').' | '.($site['company_name'] ?? 'Hoang Thuoc Medical'))
-@section('content')
-<section class="page-title"><div class="container"><span class="eyebrow dark">{{ $locale === 'en' ? 'OUR PERSPECTIVE' : 'GÓC NHÌN HOANG THUOC MEDICAL' }}</span><h1>{{ $locale === 'en' ? 'News & stories' : 'Tin tức & câu chuyện' }}</h1><p>{{ $locale === 'en' ? 'Stories about people, culture and the journey we are building together.' : 'Những lát cắt về con người, văn hóa và hành trình phát triển cùng Hoang Thuoc Medical.' }}</p></div></section>
-<section class="container section news-grid">@forelse($posts as $post)<article class="news-card"><div class="news-art {{ $loop->first ? 'art-one' : 'art-two' }}" @if($post->cover_image) style="background-image:url('{{ asset('storage/'.$post->cover_image) }}')" @endif></div><span>{{ $post->published_at?->format('d.m.Y') }}</span><h3>{{ $post->localized('title') }}</h3><p>{{ $post->localized('excerpt') }}</p><a class="link" href="{{ route('news.show', $post->slug) }}">{{ $locale === 'en' ? 'Read more' : 'Đọc thêm' }} →</a></article>@empty<div class="empty">{{ $locale === 'en' ? 'There are no published posts yet.' : 'Chưa có bài viết được đăng.' }}</div>@endforelse</section>
-@endsection
