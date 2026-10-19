@@ -1,0 +1,17 @@
+@csrf
+<div class="form-grid">
+<label class="span-2">Tên vị trí<input name="title" value="{{ old('title',$job->title) }}" required></label>
+<label>Địa điểm<input name="location" value="{{ old('location',$job->location) }}" required></label>
+<label>Hình thức<select name="employment_type" required>@foreach(['full-time'=>'Toàn thời gian','part-time'=>'Bán thời gian','contract'=>'Hợp đồng','internship'=>'Thực tập'] as $k=>$v)<option value="{{ $k }}" @selected(old('employment_type',$job->employment_type)===$k)>{{ $v }}</option>@endforeach</select></label>
+<label>Mức lương<input name="salary" value="{{ old('salary',$job->salary) }}" placeholder="VD: 12–18 triệu"></label>
+<label>Email nhận CV<input type="email" name="contact_email" value="{{ old('contact_email',$job->contact_email) }}" placeholder="Để trống dùng HR_EMAIL"></label>
+<label class="span-2">Tóm tắt<textarea name="summary" rows="3" required>{{ old('summary',$job->summary) }}</textarea></label>
+<label class="span-2">Mô tả công việc<textarea name="description" rows="8" required>{{ old('description',$job->description) }}</textarea></label>
+<label class="span-2">Yêu cầu<textarea name="requirements" rows="6">{{ old('requirements',$job->requirements) }}</textarea></label>
+<label class="span-2">Quyền lợi<textarea name="benefits" rows="6">{{ old('benefits',$job->benefits) }}</textarea></label>
+<label>Trạng thái<select name="status"><option value="draft" @selected(old('status',$job->status ?: 'draft')==='draft')>Bản nháp</option><option value="published" @selected(old('status',$job->status)==='published')>Đăng công khai</option><option value="closed" @selected(old('status',$job->status)==='closed')>Đã đóng</option></select></label>
+<label>Hạn nộp<input type="date" name="expires_at" value="{{ old('expires_at',$job->expires_at?->format('Y-m-d')) }}"></label>
+<label class="span-2">Ảnh minh họa<input type="file" name="image" accept="image/*">@if($job->image_path)<small>Đã có ảnh. Chọn ảnh mới nếu muốn thay.</small>@endif</label>
+</div>
+@if($errors->any())<div class="alert error"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+<button class="btn" type="submit">Lưu tin tuyển dụng</button>

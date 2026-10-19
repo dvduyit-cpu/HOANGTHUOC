@@ -1,0 +1,5 @@
+{
+  "terminal.integrated.env.windows": {
+    "PATH": "C:\\laragon\\bin\\php\\php-8.4.20-Win32-vs17-x64;${env:PATH}"
+  }
+}

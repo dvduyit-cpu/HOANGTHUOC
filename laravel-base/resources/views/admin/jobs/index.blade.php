@@ -1,0 +1,6 @@
+@extends('layouts.admin')
+@section('title', 'Tuyển dụng | Hoang Thuoc Medical')
+@section('content')
+<div class="page-head refined-page-head"><div><span class="panel-kicker">TUYỂN DỤNG</span><h1>Vị trí tuyển dụng</h1><p class="muted">Tạo, biên tập và quản lý các tin đang hiển thị trên website.</p></div><a class="btn" href="{{ route('admin.jobs.create') }}">+ Đăng tin mới</a></div>
+<div class="table-wrap refined-table"><table><thead><tr><th>Vị trí</th><th>Trạng thái</th><th>Hạn nộp</th><th>Người tạo</th><th></th></tr></thead><tbody>@forelse($jobs as $job)<tr><td><strong>{{ $job->title }}</strong><br><small>{{ $job->location }}</small></td><td><span class="status-pill {{ $job->status }}">{{ $job->status === 'published' ? 'Đang hiển thị' : ($job->status === 'closed' ? 'Đã đóng' : 'Bản nháp') }}</span></td><td>{{ $job->expires_at?->format('d/m/Y') ?: 'Không giới hạn' }}</td><td>{{ $job->creator?->name }}</td><td class="actions"><a class="table-edit" href="{{ route('admin.jobs.edit',$job) }}">Chỉnh sửa</a><form method="post" action="{{ route('admin.jobs.destroy',$job) }}" onsubmit="return confirm('Xóa tin này?')">@csrf @method('DELETE')<button class="danger-link">Xóa</button></form></td></tr>@empty<tr><td colspan="5">Chưa có tin tuyển dụng.</td></tr>@endforelse</tbody></table></div><div class="pagination">{{ $jobs->links() }}</div>
+@endsection
