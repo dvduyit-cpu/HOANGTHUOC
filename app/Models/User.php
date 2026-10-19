@@ -11,7 +11,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'is_active',
+        'name', 'email', 'password', 'role', 'is_active', 'permissions',
     ];
 
     protected $hidden = [
@@ -24,6 +24,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'permissions' => 'array',
         ];
     }
 
@@ -34,6 +35,23 @@ class User extends Authenticatable
 
     public function canPublishJobs(): bool
     {
-        return in_array($this->role, ['admin', 'editor'], true) && $this->is_active;
+        return $this->hasPermission('jobs');
+    }
+
+    public const PERMISSIONS = [
+        'jobs' => 'Quản lý tin tuyển dụng',
+        'news' => 'Quản lý tin tức, bài viết',
+        'content' => 'Chỉnh sửa nội dung website',
+        'applications' => 'Xem, tải CV và xử lý hồ sơ ứng viên',
+    ];
+
+    public function hasPermission(string $permission): bool
+    {
+        if (! $this->is_active || ! array_key_exists($permission, self::PERMISSIONS)) {
+            return false;
+        }
+
+        return $this->isAdmin() || ($this->role === 'editor'
+            && in_array($permission, $this->permissions ?? ['jobs', 'news', 'content'], true));
     }
 }

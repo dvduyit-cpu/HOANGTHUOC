@@ -2,6 +2,8 @@
 
 Mô-đun tuyển dụng dành cho Laravel 13.
 
+Triển khai hosting: xem [HOSTING.md](HOSTING.md), dùng mẫu `.env.hosting.example`.
+
 ## Chức năng
 - Ứng viên không cần đăng ký tài khoản.
 - Xem danh sách / chi tiết việc làm đang tuyển.
@@ -10,7 +12,7 @@ Mô-đun tuyển dụng dành cho Laravel 13.
 - Trang liên hệ gửi email trực tiếp HR.
 - Đăng nhập quản trị riêng, không có đăng ký công khai.
 - Vai trò `admin`: toàn quyền, quản lý tài khoản, tin tuyển dụng, hồ sơ.
-- Vai trò `editor`: được đăng/sửa/xóa tin tuyển dụng.
+- Vai trò `editor`: cấp quyền riêng theo mục tuyển dụng, tin tức, nội dung và hồ sơ ứng viên.
 - Ảnh tin tuyển dụng lưu trên public disk.
 - Hồ sơ ứng viên lưu DB để tránh mất dữ liệu nếu SMTP gặp lỗi.
 

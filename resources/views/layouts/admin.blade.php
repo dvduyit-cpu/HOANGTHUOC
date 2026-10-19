@@ -20,9 +20,11 @@
     <nav aria-label="Điều hướng chính">
         <details class="nav-group" open><summary>NỘI DUNG & TUYỂN DỤNG <span>⌄</span></summary>
             @foreach([['admin.dashboard', 'dashboard', 'Tổng quan', 'admin.dashboard'], ['admin.jobs.index', 'briefcase', 'Tin tuyển dụng', 'admin.jobs.*'], ['admin.news.index', 'news', 'Tin tức & bài viết', 'admin.news.*'], ['admin.content.index', 'layers', 'Nội dung website', 'admin.content.*']] as [$route, $icon, $label, $pattern])
+                @if($route === 'admin.dashboard' || auth()->user()->hasPermission(explode('.', $route)[1]))
                 <a class="nav-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}" @if(request()->routeIs($pattern)) aria-current="page" @endif><x-admin-icon :name="$icon" /><span>{{ $label }}</span></a>
+                @endif
             @endforeach
-            @if(auth()->user()->isAdmin())<a class="nav-link {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}" @if(request()->routeIs('admin.applications.*')) aria-current="page" @endif><x-admin-icon name="folder" /><span>Hồ sơ ứng viên</span></a>@endif
+            @if(auth()->user()->hasPermission('applications'))<a class="nav-link {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}" @if(request()->routeIs('admin.applications.*')) aria-current="page" @endif><x-admin-icon name="folder" /><span>Hồ sơ ứng viên</span></a>@endif
         </details>
         @if(auth()->user()->isAdmin())
         <details class="nav-group" open><summary>TÀI KHOẢN & HỆ THỐNG <span>⌄</span></summary>

@@ -4,19 +4,27 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $email = env('ADMIN_EMAIL', 'admin@hoangthuocmedical.com');
+        $email = env('ADMIN_EMAIL');
+        $password = env('ADMIN_PASSWORD');
 
-        User::updateOrCreate(
+        if (! $email || User::where('email', $email)->exists()) {
+            return;
+        }
+
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL) || ! is_string($password) || mb_strlen($password) < 10) {
+            throw new \RuntimeException('Set ADMIN_EMAIL and ADMIN_PASSWORD (at least 10 characters) before seeding the admin.');
+        }
+
+        User::firstOrCreate(
             ['email' => $email],
             [
                 'name' => env('ADMIN_NAME', 'Hoang Thuoc Medical'),
-                'password' => Hash::make(env('ADMIN_PASSWORD', 'HoangThuoc@2026')),
+                'password' => $password,
                 'role' => 'admin',
                 'is_active' => true,
             ]

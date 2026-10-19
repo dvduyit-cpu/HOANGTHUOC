@@ -30,8 +30,11 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:10', 'confirmed'],
             'role' => ['required', Rule::in(['admin', 'editor'])],
             'is_active' => ['required', 'boolean'],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['string', 'distinct', Rule::in(array_keys(User::PERMISSIONS))],
         ]);
 
+        $data['permissions'] = $data['role'] === 'admin' ? null : ($data['permissions'] ?? []);
         User::create($data);
         return redirect()->route('admin.users.index')->with('success', 'Đã cấp tài khoản.');
     }
@@ -49,6 +52,8 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:10', 'confirmed'],
             'role' => ['required', Rule::in(['admin', 'editor'])],
             'is_active' => ['required', 'boolean'],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['string', 'distinct', Rule::in(array_keys(User::PERMISSIONS))],
         ]);
 
         if (blank($data['password'] ?? null)) {
@@ -58,6 +63,13 @@ class UserController extends Controller
         if ($request->user()->is($user) && ! (bool) $data['is_active']) {
             return back()->withErrors(['is_active' => 'Không thể tự khóa tài khoản đang đăng nhập.']);
         }
+
+        if ($request->user()->is($user) && $data['role'] !== 'admin') {
+            return back()->withInput($request->except(['password', 'password_confirmation']))
+                ->withErrors(['role' => 'Không thể tự bỏ quyền quản trị của tài khoản đang đăng nhập.']);
+        }
+
+        $data['permissions'] = $data['role'] === 'admin' ? null : ($data['permissions'] ?? []);
 
         $user->update($data);
         return redirect()->route('admin.users.index')->with('success', 'Đã cập nhật quyền tài khoản.');

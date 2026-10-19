@@ -39,19 +39,21 @@ Route::post('/admin/logout', [AuthController::class, 'destroy'])
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,editor'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
-    Route::resource('jobs', AdminJobController::class)->except('show');
-    Route::resource('news', AdminNewsController::class)->except('show');
-    Route::get('noi-dung', [ContentController::class, 'index'])->name('content.index');
-    Route::get('noi-dung/{section}', [ContentController::class, 'edit'])->name('content.edit');
-    Route::put('noi-dung/{section}', [ContentController::class, 'update'])->name('content.update');
+    Route::resource('jobs', AdminJobController::class)->except('show')->middleware('permission:jobs');
+    Route::resource('news', AdminNewsController::class)->except('show')->middleware('permission:news');
+    Route::get('noi-dung', [ContentController::class, 'index'])->middleware('permission:content')->name('content.index');
+    Route::get('noi-dung/{section}', [ContentController::class, 'edit'])->middleware('permission:content')->name('content.edit');
+    Route::put('noi-dung/{section}', [ContentController::class, 'update'])->middleware('permission:content')->name('content.update');
+    Route::middleware('permission:applications')->group(function () {
+        Route::get('applications', [AdminApplicationController::class, 'index'])->name('applications.index');
+        Route::get('applications/{application}', [AdminApplicationController::class, 'show'])->name('applications.show');
+        Route::patch('applications/{application}', [AdminApplicationController::class, 'update'])->name('applications.update');
+        Route::get('applications/{application}/download', [AdminApplicationController::class, 'download'])->name('applications.download');
+    });
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('settings', [SiteSettingController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SiteSettingController::class, 'update'])->name('settings.update');
     Route::resource('users', AdminUserController::class)->except(['show', 'destroy']);
-    Route::get('applications', [AdminApplicationController::class, 'index'])->name('applications.index');
-    Route::get('applications/{application}', [AdminApplicationController::class, 'show'])->name('applications.show');
-    Route::patch('applications/{application}', [AdminApplicationController::class, 'update'])->name('applications.update');
-    Route::get('applications/{application}/download', [AdminApplicationController::class, 'download'])->name('applications.download');
 });
