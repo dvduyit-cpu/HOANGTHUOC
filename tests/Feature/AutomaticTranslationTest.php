@@ -14,30 +14,26 @@ class AutomaticTranslationTest extends TestCase
     {
         $target = url('/tin-tuc');
         $this->get('/ngon-ngu/en?'.http_build_query(['redirect' => $target]))
-            ->assertRedirect('https://translate.google.com/translate?'.http_build_query([
-                'sl' => 'vi', 'tl' => 'en', 'u' => $target,
-            ]));
-        $this->withSession(['locale' => 'en'])->get('/')->assertOk()->assertSee('<html lang="vi">', false);
+            ->assertRedirect($target)->assertSessionHas('locale', 'en');
+        $this->withSession(['locale' => 'en'])->get('/')->assertOk()->assertSee('<html lang="en">', false)->assertSee('Connecting Hearts');
     }
 
     public function test_redirects_cannot_translate_admin_or_redirect_to_another_site(): void
     {
         foreach ([url('/admin/settings'), 'https://example.org/'] as $target) {
             $this->get('/ngon-ngu/en?'.http_build_query(['redirect' => $target]))
-                ->assertRedirect('https://translate.google.com/translate?'.http_build_query([
-                    'sl' => 'vi', 'tl' => 'en', 'u' => route('home'),
-                ]));
+                ->assertRedirect(route('home'));
         }
         $this->get('/ngon-ngu/vi?redirect=https://example.org/')->assertRedirect(route('home'));
     }
 
-    public function test_admin_forms_only_show_vietnamese_inputs(): void
+    public function test_admin_forms_support_optional_english_content(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
-        $this->get('/admin/jobs/create')->assertOk()->assertDontSee('name="title_en"', false);
-        $this->get('/admin/news/create')->assertOk()->assertDontSee('name="content_en"', false);
+        $this->get('/admin/jobs/create')->assertOk()->assertSee('name="title_en"', false);
+        $this->get('/admin/news/create')->assertOk()->assertSee('name="content_en"', false);
         foreach (['thuong-hieu', 'trang-chu', 'gioi-thieu', 'lien-he'] as $section) {
-            $this->get('/admin/noi-dung/'.$section)->assertOk()->assertDontSee('_en]');
+            $this->get('/admin/noi-dung/'.$section)->assertOk()->assertSee('_en]');
         }
     }
 }

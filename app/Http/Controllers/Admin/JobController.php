@@ -80,6 +80,14 @@ class JobController extends Controller
     private function validated(Request $request): array
     {
         return $request->validate([
+            'title_en' => ['nullable', 'string', 'max:190'],
+            'location_en' => ['nullable', 'string', 'max:190'],
+            'salary_en' => ['nullable', 'string', 'max:190'],
+            'summary_en' => ['nullable', 'string', 'max:500'],
+            'description_en' => ['nullable', 'string', 'max:20000'],
+            'requirements_en' => ['nullable', 'string', 'max:15000'],
+            'benefits_en' => ['nullable', 'string', 'max:15000'],
+
             'title' => ['required', 'string', 'max:190'],
             'location' => ['required', 'string', 'max:190'],
             'employment_type' => ['required', Rule::in(['full-time', 'part-time', 'contract', 'internship'])],

@@ -10,8 +10,8 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Vietnamese is the source language; English is translated from the public page.
-        app()->setLocale('vi');
+        $locale = $request->session()->get('locale', 'vi');
+        app()->setLocale(! $request->is('admin', 'admin/*') && in_array($locale, ['vi', 'en'], true) ? $locale : 'vi');
 
         return $next($request);
     }

@@ -49,7 +49,11 @@ class NewsController extends Controller
 
     private function validated(Request $request): array
     {
-        return $request->validate(['title_vi'=>['required','string','max:190'],'excerpt_vi'=>['required','string','max:600'],'content_vi'=>['required','string','max:30000'],'status'=>['required','in:draft,published'],'cover_image'=>['nullable',File::image()->max('4mb')]]);
+        return $request->validate([
+            'title_en' => ['nullable', 'string', 'max:190'],
+            'excerpt_en' => ['nullable', 'string', 'max:600'],
+            'content_en' => ['nullable', 'string', 'max:30000'],
+'title_vi'=>['required','string','max:190'],'excerpt_vi'=>['required','string','max:600'],'content_vi'=>['required','string','max:30000'],'status'=>['required','in:draft,published'],'cover_image'=>['nullable',File::image()->max('4mb')]]);
     }
 
     private function slug(string $title, ?int $ignore = null): string

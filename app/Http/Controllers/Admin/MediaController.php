@@ -15,6 +15,7 @@ class MediaController extends Controller
     private static function usedPaths(): \Illuminate\Support\Collection
     {
         return collect(SiteSetting::values())->values()
+            ->merge(\App\Support\TeamProducts::all()->pluck('image_path'))
             ->merge(Job::query()->whereNotNull('image_path')->pluck('image_path'))
             ->merge(News::query()->whereNotNull('cover_image')->pluck('cover_image'))
             ->filter()->unique();

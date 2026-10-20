@@ -10,7 +10,7 @@ class LocaleController extends Controller
     public function switch(Request $request, string $locale): RedirectResponse
     {
         abort_unless(in_array($locale, ['vi', 'en'], true), 404);
-        $request->session()->forget('locale');
+        $request->session()->put('locale', $locale);
 
         $target = $request->string('redirect')->toString();
         $base = parse_url(route('home'));
@@ -21,12 +21,6 @@ class LocaleController extends Controller
             || isset($parts['user']) || isset($parts['pass'])
             || preg_match('#^/(admin|ngon-ngu)(/|$)#', $parts['path'] ?? '/')) {
             $target = route('home');
-        }
-
-        if ($locale === 'en') {
-            return redirect()->away('https://translate.google.com/translate?'.http_build_query([
-                'sl' => 'vi', 'tl' => 'en', 'u' => $target,
-            ]));
         }
 
         return redirect()->to($target);

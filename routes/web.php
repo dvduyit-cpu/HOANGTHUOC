@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tuyen-dung', [JobController::class, 'index'])->name('jobs.index');
 Route::view('/gioi-thieu', 'pages.about')->name('about');
+Route::view('/doi-ngu', 'pages.team')->name('team');
 Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/ngon-ngu/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
@@ -40,6 +41,7 @@ Route::post('/admin/logout', [AuthController::class, 'destroy'])
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,editor'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
+    Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except('show')->middleware('permission:content');
     Route::resource('jobs', AdminJobController::class)->except('show')->middleware('permission:jobs');
     Route::resource('news', AdminNewsController::class)->except('show')->middleware('permission:news');
     Route::get('kho-anh', [\App\Http\Controllers\Admin\MediaController::class, 'index'])->middleware('permission:content')->name('media.index');

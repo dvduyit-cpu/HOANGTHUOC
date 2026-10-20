@@ -32,6 +32,7 @@ class WebsiteSeeder extends Seeder
             'contact_title_vi' => 'Liên hệ bộ phận tuyển dụng', 'contact_title_en' => 'Contact our recruitment team',
             'contact_body_vi' => 'Gửi câu hỏi cho chúng tôi. Bộ phận nhân sự sẽ phản hồi qua email hoặc điện thoại.', 'contact_body_en' => 'Send us your question. Our HR team will respond by email or phone.',
         ];
+        $settings = array_replace($settings, config('medical-content'), config('english-content'));
         foreach ($settings as $key => $value) SiteSetting::firstOrCreate(['key' => $key], ['value' => $value]);
 
         News::firstOrCreate(['slug' => 'van-hoa-lay-con-nguoi-lam-trung-tam'], ['title_vi'=>'Hành trình xây dựng môi trường làm việc lấy con người làm trung tâm','title_en'=>'Building a people-first workplace','excerpt_vi'=>'Khám phá cách mỗi ý tưởng nhỏ được lắng nghe, nuôi dưỡng và trở thành giá trị lớn cho tập thể.','excerpt_en'=>'Discover how small ideas are heard, nurtured and grown into shared value.','content_vi'=>'Tại Hoang Thuoc Medical, chúng tôi tin rằng sự phát triển bền vững bắt đầu từ con người.','content_en'=>'At Hoang Thuoc Medical, we believe sustainable growth begins with people.','status'=>'published','published_at'=>now()]);

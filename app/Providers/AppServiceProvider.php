@@ -35,8 +35,12 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by(Str::transliterate(Str::lower((string) $request->input('email')).'|'.$request->ip()));
         });
 
+        View::composer('pages.about', function ($view): void {
+            $view->with('products', \App\Support\TeamProducts::all()->where('is_published', 1));
+        });
+
         View::composer('*', function ($view): void {
-            $view->with('site', SiteSetting::values());
+            $view->with('site', \App\Support\PageContent::localized(SiteSetting::values()));
             $view->with('locale', app()->getLocale());
         });
     }

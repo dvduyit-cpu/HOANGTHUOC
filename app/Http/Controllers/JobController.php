@@ -17,7 +17,10 @@ class JobController extends Controller
                 $query->where(function ($q) use ($keyword) {
                     $q->where('title', 'like', "%{$keyword}%")
                         ->orWhere('location', 'like', "%{$keyword}%")
-                        ->orWhere('summary', 'like', "%{$keyword}%");
+                        ->orWhere('summary', 'like', "%{$keyword}%")
+                        ->orWhere('title_en', 'like', "%{$keyword}%")
+                        ->orWhere('location_en', 'like', "%{$keyword}%")
+                        ->orWhere('summary_en', 'like', "%{$keyword}%");
                 });
             })
             ->latest('published_at')

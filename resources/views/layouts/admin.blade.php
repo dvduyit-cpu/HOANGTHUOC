@@ -25,7 +25,7 @@
                 <a class="nav-link {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}" @if(request()->routeIs($pattern)) aria-current="page" @endif><x-admin-icon :name="$icon" /><span>{{ $label }}</span></a>
                 @endif
             @endforeach
-            @if(auth()->user()->hasPermission('content'))<a class="nav-link {{ request()->routeIs('admin.media.*') ? 'active' : '' }}" href="{{ route('admin.media.index') }}"><x-admin-icon name="folder" /><span>Kho hình ảnh</span></a>@endif
+            @if(auth()->user()->hasPermission('content'))<a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}"><x-admin-icon name="layers" /><span>Sản phẩm</span></a><a class="nav-link {{ request()->routeIs('admin.media.*') ? 'active' : '' }}" href="{{ route('admin.media.index') }}"><x-admin-icon name="folder" /><span>Kho hình ảnh</span></a>@endif
             @if(auth()->user()->hasPermission('applications'))<a class="nav-link {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}" @if(request()->routeIs('admin.applications.*')) aria-current="page" @endif><x-admin-icon name="folder" /><span>Hồ sơ ứng viên</span></a>@endif
         </details>
         @if(auth()->user()->isAdmin())
