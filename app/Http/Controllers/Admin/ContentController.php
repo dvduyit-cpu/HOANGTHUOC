@@ -38,6 +38,9 @@ class ContentController extends Controller
             $rules['settings.'.$key] = $field[1] === 'image'
                 ? ['nullable', 'string', \Illuminate\Validation\Rule::in(MediaController::images()->pluck('path')->all())]
                 : ['nullable', 'string', 'max:20000'];
+            if ($field[1] === 'number') {
+                $rules['settings.'.$key] = ['nullable', 'integer', 'between:8,96'];
+            }
             if ($field[1] === 'image') {
                 $rules['uploads.'.$key] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'];
             }

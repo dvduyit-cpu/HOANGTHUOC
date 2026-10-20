@@ -23,9 +23,21 @@
     <div class="hp-intro-copy"><p>{{ ($site['home_intro_body_vi'] ?? '') ?: 'Chúng tôi tin rằng những giá trị tốt đẹp bắt đầu từ con người. Cùng nhau, chúng ta học hỏi, kết nối và đóng góp bằng chuyên môn của mình.' }}</p><a class="hp-inline-link" href="{{ route('about') }}">{{ __('Câu chuyện của chúng tôi') }} <span aria-hidden="true">↗</span></a></div>
 </section>
 <section class="container hp-values" aria-label="Tinh thần làm việc">
-    <article><span class="hp-value-number">01</span><h3>{{ $site['home_block_3_vi'] }}</h3><p>{{ $site['home_block_4_vi'] }}</p></article>
-    <article><span class="hp-value-number">02</span><h3>{{ $site['home_block_5_vi'] }}</h3><p>{{ $site['home_block_6_vi'] }}</p></article>
-    <article><span class="hp-value-number">03</span><h3>{{ $site['home_block_7_vi'] }}</h3><p>{{ $site['home_block_8_vi'] }}</p></article>
+    @foreach(range(1, 3) as $valueIndex)
+    @php
+        $valueKey = 'home_value_'.$valueIndex;
+        $titleKey = 'home_block_'.($valueIndex * 2 + 1).'_vi';
+        $bodyKey = 'home_block_'.($valueIndex * 2 + 2).'_vi';
+        $numberSize = filled($site[$valueKey.'_number_size'] ?? null) ? max(8, min(96, (int) $site[$valueKey.'_number_size'])) : 13;
+        $titleSize = filled($site[$valueKey.'_title_size'] ?? null) ? max(8, min(96, (int) $site[$valueKey.'_title_size'])) : 20;
+        $bodySize = filled($site[$valueKey.'_body_size'] ?? null) ? max(8, min(96, (int) $site[$valueKey.'_body_size'])) : 14;
+    @endphp
+    <article>
+        <span class="hp-value-number" style="font-size: {{ $numberSize }}px">{{ $site[$valueKey.'_number'] ?? sprintf('%02d', $valueIndex) }}</span>
+        <h3 style="font-size: {{ $titleSize }}px">{{ $site[$titleKey] }}</h3>
+        <p style="font-size: {{ $bodySize }}px">{{ $site[$bodyKey] }}</p>
+    </article>
+    @endforeach
 </section>
 <section class="hp-culture {{ !empty($site['culture_image']) ? 'hp-culture-photo' : '' }}" aria-labelledby="culture-heading">@if(!empty($site['culture_image']))<img class="culture-background" src="{{ asset('storage/'.$site['culture_image']) }}" alt="Chăm sóc người bệnh" loading="lazy">@endif<div class="container hp-culture-inner">
     <div class="hp-culture-mark" aria-hidden="true"><span>{{ $site['home_block_9_vi'] }}</span><span>{{ $site['home_block_10_vi'] }}</span><span>{{ $site['home_block_11_vi'] }}</span><i>H<span>+</span></i></div>

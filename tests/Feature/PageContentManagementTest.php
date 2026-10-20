@@ -34,6 +34,38 @@ class PageContentManagementTest extends TestCase
         $this->assertDatabaseMissing('site_settings', ['key' => 'admin_name']);
     }
 
+    public function test_home_value_numbers_and_font_sizes_can_be_managed(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $settings = [];
+        foreach (range(1, 3) as $index) {
+            $key = 'home_value_'.$index;
+            $this->get('/admin/noi-dung/trang-chu')->assertSee('settings['.$key.'_number]', false);
+            $settings[$key.'_number'] = '0'.($index + 3);
+            $settings[$key.'_number_size'] = 18;
+            $settings[$key.'_title_size'] = 26;
+            $settings[$key.'_body_size'] = 16;
+        }
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => $settings])->assertSessionHasNoErrors();
+        $page = $this->get('/')->assertOk();
+        foreach (range(4, 6) as $number) {
+            $page->assertSee('>0'.$number.'</span>', false);
+        }
+        foreach ([18, 26, 16] as $size) {
+            $page->assertSee('font-size: '.$size.'px', false);
+        }
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => [
+            'home_value_1_number_size' => '18px',
+            'home_value_1_title_size' => 97,
+            'home_value_1_body_size' => 7,
+        ]])->assertSessionHasErrors([
+            'settings.home_value_1_number_size',
+            'settings.home_value_1_title_size',
+            'settings.home_value_1_body_size',
+        ]);
+        $this->assertDatabaseHas('site_settings', ['key' => 'home_value_1_title_size', 'value' => '26']);
+    }
+
     public function test_uploaded_portrait_is_used_and_protected_from_media_deletion(): void
     {
         Storage::fake('public');

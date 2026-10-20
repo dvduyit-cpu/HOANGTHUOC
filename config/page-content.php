@@ -2,6 +2,18 @@
 
 return [
     'trang-chu' => [
+        'home_value_1_number' => ['Giá trị 1 - Số hiển thị', 'text', '01'],
+        'home_value_1_number_size' => ['Giá trị 1 - Cỡ chữ số (px, 8-96)', 'number', 13],
+        'home_value_1_title_size' => ['Giá trị 1 - Cỡ chữ tiêu đề (px, 8-96)', 'number', 20],
+        'home_value_1_body_size' => ['Giá trị 1 - Cỡ chữ nội dung (px, 8-96)', 'number', 14],
+        'home_value_2_number' => ['Giá trị 2 - Số hiển thị', 'text', '02'],
+        'home_value_2_number_size' => ['Giá trị 2 - Cỡ chữ số (px, 8-96)', 'number', 13],
+        'home_value_2_title_size' => ['Giá trị 2 - Cỡ chữ tiêu đề (px, 8-96)', 'number', 20],
+        'home_value_2_body_size' => ['Giá trị 2 - Cỡ chữ nội dung (px, 8-96)', 'number', 14],
+        'home_value_3_number' => ['Giá trị 3 - Số hiển thị', 'text', '03'],
+        'home_value_3_number_size' => ['Giá trị 3 - Cỡ chữ số (px, 8-96)', 'number', 13],
+        'home_value_3_title_size' => ['Giá trị 3 - Cỡ chữ tiêu đề (px, 8-96)', 'number', 20],
+        'home_value_3_body_size' => ['Giá trị 3 - Cỡ chữ nội dung (px, 8-96)', 'number', 14],
         'home_block_1_vi' => ['Tiêu đề / nhãn: CHUYÊN MÔN VỮNG VÀNG. GIÁ TRỊ BỀN LÂU.', 'text', 'CHUYÊN MÔN VỮNG VÀNG. GIÁ TRỊ BỀN LÂU.'],
         'home_block_2_vi' => ['Tiêu đề / nhãn: 01 / CÙNG ĐỒNG HÀNH', 'text', '01 / CÙNG ĐỒNG HÀNH'],
         'home_block_3_vi' => ['Tiêu đề / nhãn: Tận tâm với con người', 'text', 'Tận tâm với con người'],
