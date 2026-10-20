@@ -5,7 +5,7 @@
 @endphp
 <footer class="footer">
     <div class="container footer-grid">
-        <div><a class="brand brand-logo footer-brand" href="{{ route('home') }}"><img class="company-logo" src="{{ !empty($site['site_logo']) ? asset('storage/'.$site['site_logo']) : asset('images/hoang-thuoc-logo.png') }}" alt="Hoang Thuoc Medical"></a><strong class="footer-brand-name">{{ $site['company_name'] }}</strong>@if(!empty($site['footer_description_'.$locale]))<p>{{ $site['footer_description_'.$locale] }}</p>@endif</div>
+        <div><a class="brand brand-logo footer-brand" href="{{ route('home') }}"><img class="company-logo" src="{{ !empty($site['site_logo']) ? asset('storage/'.$site['site_logo']) : asset('images/hoang-thuoc-logo.png') }}" alt="Hoang Thuoc Medical"></a><strong class="footer-brand-name" data-content-keys="company_name">{{ $site['company_name'] }}</strong>@if(!empty($site['footer_description_'.$locale]))<p>{{ $site['footer_description_'.$locale] }}</p>@endif</div>
         <div>
             <strong>{{ __('Kết nối cùng chúng tôi') }}</strong>
             <div class="footer-contact-list">

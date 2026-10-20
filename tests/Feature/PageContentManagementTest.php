@@ -13,6 +13,33 @@ class PageContentManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_preview_renders_draft_without_publishing_it(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $pages = ['trang-chu', 'gioi-thieu', 'doi-ngu', 'tuyen-dung', 'tin-tuc', 'lien-he', 'thuong-hieu'];
+        foreach ($pages as $section) {
+            $this->post('/admin/noi-dung/'.$section.'/preview', ['preview_locale' => 'vi'])
+                ->assertOk()->assertHeader('Cache-Control', 'max-age=0, must-revalidate, no-store, private');
+        }
+        $this->post('/admin/noi-dung/trang-chu/preview', [
+            'preview_locale' => 'vi',
+            'settings' => ['home_value_1_number' => 'Draft number', 'home_value_1_title_size' => 34],
+        ])->assertOk()->assertSee('Draft number')->assertSee('font-size: 34px', false)
+            ->assertSee('data-content-keys="home_value_1_number home_value_1_number_size"', false)
+            ->assertSee('data-content-keys="home_block_3_vi home_value_1_title_size"', false)
+            ->assertSee('css/home.css', false);
+        $this->assertDatabaseMissing('site_settings', ['key' => 'home_value_1_number']);
+        $this->get('/')->assertDontSee('Draft number');
+        $this->postJson('/admin/noi-dung/trang-chu/preview', [
+            'preview_locale' => 'vi', 'settings' => ['home_value_1_title_size' => 'bad'],
+        ])->assertUnprocessable()->assertJsonValidationErrors('settings.home_value_1_title_size');
+    }
+
+    public function test_preview_requires_authentication(): void
+    {
+        $this->postJson('/admin/noi-dung/trang-chu/preview', ['preview_locale' => 'vi'])->assertUnauthorized();
+    }
+
     public function test_each_page_can_be_edited_and_changes_appear_publicly(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));

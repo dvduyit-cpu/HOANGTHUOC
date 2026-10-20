@@ -5,7 +5,7 @@
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $site['site_title'] ?? 'Hoang Thuoc Medical')</title><meta name="description" content="@yield('meta_description', $site['site_description'] ?? 'Hoang Thuoc Medical Careers')">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}"><link rel="stylesheet" href="{{ asset('css/rebrand.css') }}?v={{ filemtime(public_path('css/rebrand.css')) }}"><link rel="stylesheet" href="{{ asset('css/typography-fix.css') }}?v={{ filemtime(public_path('css/typography-fix.css')) }}"><link rel="stylesheet" href="{{ asset('css/brand-content.css') }}?v={{ filemtime(public_path('css/brand-content.css')) }}"><link rel="stylesheet" href="{{ asset('css/website-fix.css') }}?v={{ filemtime(public_path('css/website-fix.css')) }}"><link rel="stylesheet" href="{{ asset('css/polish.css') }}"><link rel="stylesheet" href="{{ asset('css/logo.css') }}">
-    @if(request()->routeIs('home'))<link rel="stylesheet" href="{{ asset('css/home.css') }}?v={{ filemtime(public_path('css/home.css')) }}">@endif
+    @if(request()->routeIs('home') || (request()->routeIs('admin.content.preview') && in_array(request()->route('section'), ['trang-chu', 'thuong-hieu'], true)))<link rel="stylesheet" href="{{ asset('css/home.css') }}?v={{ filemtime(public_path('css/home.css')) }}">@endif
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}?v={{ filemtime(public_path('css/footer.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/site-motion.css') }}?v={{ filemtime(public_path('css/site-motion.css')) }}">
     <script defer src="{{ asset('js/site-motion.js') }}?v={{ filemtime(public_path('js/site-motion.js')) }}"></script>

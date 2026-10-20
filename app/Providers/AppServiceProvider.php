@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function ($view): void {
-            $view->with('site', \App\Support\PageContent::localized(SiteSetting::values()));
+            $view->with('site', \App\Support\PageContent::localized(array_replace(SiteSetting::values(), request()->attributes->get('content_preview', []))));
             $view->with('locale', app()->getLocale());
         });
     }

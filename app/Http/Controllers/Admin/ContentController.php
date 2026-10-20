@@ -33,6 +33,39 @@ class ContentController extends Controller
         abort_unless(array_key_exists($section, $this->sections()), 404);
 
         $fields = $this->fieldsFor($section);
+        $data = $request->validate($this->contentRules($fields));
+        $values = $data['settings'] ?? [];
+        foreach ($fields as $key => $field) {
+            if ($field[1] === 'image' && $request->hasFile('uploads.'.$key)) {
+                $values[$key] = $request->file('uploads.'.$key)->store('media/'.now()->timezone('Asia/Bangkok')->format('Y'), 'public');
+            }
+        }
+        SiteSetting::putMany($values);
+
+        return back()->with('success', 'Đã lưu thay đổi.');
+    }
+
+    public function preview(Request $request, string $section): \Illuminate\Http\Response
+    {
+        abort_unless(array_key_exists($section, $this->sections()), 404);
+        $data = $request->validate($this->contentRules($this->fieldsFor($section)));
+        $request->attributes->set('content_preview', $data['settings'] ?? []);
+        $locale = $request->validate(['preview_locale' => ['required', 'in:vi,en']])['preview_locale'];
+        app()->setLocale($locale);
+        $view = match ($section) {
+            'gioi-thieu' => view('pages.about'),
+            'doi-ngu' => view('pages.team'),
+            'tuyen-dung' => app(\App\Http\Controllers\JobController::class)->index($request),
+            'tin-tuc' => app(\App\Http\Controllers\NewsController::class)->index(),
+            'lien-he' => view('contact.create'),
+            default => app(\App\Http\Controllers\HomeController::class)->index(),
+        };
+
+        return response($view->render())->header('Cache-Control', 'no-store');
+    }
+
+    private function contentRules(array $fields): array
+    {
         $rules = [];
         foreach ($fields as $key => $field) {
             $rules['settings.'.$key] = $field[1] === 'image'
@@ -45,16 +78,7 @@ class ContentController extends Controller
                 $rules['uploads.'.$key] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'];
             }
         }
-        $data = $request->validate($rules);
-        $values = $data['settings'] ?? [];
-        foreach ($fields as $key => $field) {
-            if ($field[1] === 'image' && $request->hasFile('uploads.'.$key)) {
-                $values[$key] = $request->file('uploads.'.$key)->store('media/'.now()->timezone('Asia/Bangkok')->format('Y'), 'public');
-            }
-        }
-        SiteSetting::putMany($values);
-
-        return back()->with('success', 'Đã lưu thay đổi.');
+        return $rules;
     }
 
     private function sections(): array
