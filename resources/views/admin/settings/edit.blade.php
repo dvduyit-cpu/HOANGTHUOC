@@ -33,6 +33,8 @@
         </div>
         <div class="form-grid">
             <label>Tự chọn màu<input type="color" name="admin_color" id="admin-color" value="{{ old('admin_color', $settings['admin_color'] ?? '#2563eb') }}" required></label>
+            <label>Màu nền header<input type="color" name="admin_header_color" value="{{ old('admin_header_color', $settings['admin_header_color'] ?? '#ffffff') }}" data-admin-surface="header" data-default="#ffffff"><small>Chữ và biểu tượng tự đổi màu để dễ đọc.</small></label>
+            <label>Màu nền menu bên trái<input type="color" name="admin_sidebar_color" value="{{ old('admin_sidebar_color', $settings['admin_sidebar_color'] ?? '#13263f') }}" data-admin-surface="sidebar" data-default="#13263f"><small>Xem trực tiếp trên menu khi chọn màu.</small></label>
             <label>Mã màu HEX<input type="text" id="admin-color-hex" value="{{ old('admin_color', $settings['admin_color'] ?? '#2563eb') }}" pattern="#[0-9a-fA-F]{6}" maxlength="7" spellcheck="false" required></label>
             <label>Phông chữ<select name="admin_font" id="admin-font">@foreach(['system' => 'Hệ thống · Segoe UI', 'arial' => 'Arial', 'serif' => 'Georgia'] as $key => $label)<option value="{{ $key }}" @selected(old('admin_font', $settings['admin_font'] ?? 'system') === $key)>{{ $label }}</option>@endforeach</select></label>
             <label>Cỡ chữ<select name="admin_font_size" id="admin-font-size">@foreach(range(14, 20) as $size)<option value="{{ $size }}" @selected((int) old('admin_font_size', $settings['admin_font_size'] ?? 16) === $size)>{{ $size }} px{{ $size === 16 ? ' · Mặc định' : '' }}</option>@endforeach</select></label>

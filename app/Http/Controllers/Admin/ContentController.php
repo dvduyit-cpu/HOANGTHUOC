@@ -74,6 +74,9 @@ class ContentController extends Controller
             if ($field[1] === 'number') {
                 $rules['settings.'.$key] = ['nullable', 'integer', 'between:8,96'];
             }
+            if ($field[1] === 'color') {
+                $rules['settings.'.$key] = ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'];
+            }
             if ($field[1] === 'image') {
                 $rules['uploads.'.$key] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'];
             }
@@ -90,10 +93,11 @@ class ContentController extends Controller
             'gioi-thieu' => ['title' => 'Nội dung trang giới thiệu', 'description' => 'Chỉnh sửa thông điệp và câu chuyện thương hiệu trên trang Giới thiệu.', 'fields' => ['about_eyebrow_vi', 'about_eyebrow_en', 'about_title_vi', 'about_title_en', 'about_body_vi', 'about_body_en', 'about_story_title_vi', 'about_story_title_en']],
             'lien-he' => ['title' => 'Nội dung trang liên hệ', 'description' => 'Chỉnh sửa lời chào và phần mô tả ở trang Liên hệ.', 'fields' => ['contact_title_vi', 'contact_title_en', 'contact_body_vi', 'contact_body_en']],
         ];
-        foreach (['tuyen-dung' => 'Trang tuyển dụng', 'tin-tuc' => 'Trang tin tức'] as $key => $title) {
+        foreach (['tuyen-dung' => 'Trang tuyển dụng', 'tin-tuc' => 'Trang tin tức', 'mau-sac' => 'Màu sắc website'] as $key => $title) {
             $sections[$key] = ['title' => $title, 'description' => 'Chỉnh sửa nội dung hiển thị trên trang.', 'fields' => []];
         }
         $routes = ['trang-chu' => 'home', 'gioi-thieu' => 'about', 'doi-ngu' => 'team', 'tuyen-dung' => 'jobs.index', 'tin-tuc' => 'news', 'lien-he' => 'contact.create', 'thuong-hieu' => 'home'];
+        $routes['mau-sac'] = 'home';
         foreach ($sections as $key => &$section) {
             $section['fields'] = array_merge($section['fields'], array_keys(config('page-content.'.$key, [])));
             $section['route'] = $routes[$key];

@@ -1,0 +1,19 @@
+body,.home-premium{background:var(--web-background)}
+.home-premium{--hp-blue:var(--web-primary);--hp-navy:var(--web-heading);--hp-muted:var(--web-text)}
+main h1,main h2,main h3,main h4{color:var(--web-heading)}
+main p,.about-story p,.team-story p,.medical-solutions p,.value-grid p,.contact-copy>p,.news-card p,.article-content{color:var(--web-text)}
+.btn,.hp-button,.contact-form-wrap .btn{background:var(--web-primary);color:#fff}
+.btn:hover,.hp-button:hover{background:color-mix(in srgb,var(--web-primary),#000 18%)}
+.hp-button-white{background:#fff;color:var(--web-primary)}
+.hp-button-white:hover{background:var(--web-surface);color:var(--web-primary)}
+.link,.back,.hp-inline-link,.hp-value-number,.value-grid b,.eyebrow.dark,.primary-nav a:hover,.primary-nav a.active,.contact-details svg,.contact-details strong,.contact-details a{color:var(--web-primary)}
+.primary-nav a:after{background:var(--web-primary)}
+.hp-opportunity,.hp-culture,.hp-updates,.values,.journey,.page-title,.feature-story,.auth-wrap{background:var(--web-surface)}
+.contact-page{background:linear-gradient(var(--web-surface) 0 25%,var(--web-background) 25%)}
+.footer,.hp-culture-mark,.hp-hero{background-color:var(--web-dark)}
+.footer{background:var(--web-dark)}
+.hp-hero-shade{background:linear-gradient(90deg,color-mix(in srgb,var(--web-dark) 94%,transparent),color-mix(in srgb,var(--web-dark) 80%,transparent) 35%,color-mix(in srgb,var(--web-dark) 10%,transparent) 85%),linear-gradient(0deg,color-mix(in srgb,var(--web-dark) 50%,transparent),transparent 35%)}
+.page-hero{background-color:var(--web-dark);background-image:linear-gradient(90deg,color-mix(in srgb,var(--web-dark) 90%,transparent),color-mix(in srgb,var(--web-dark) 48%,transparent)),url('/images/hero-healthcare-team.png')}
+.hp-hero h1,.home-premium .hp-hero h1,.page-hero h1{color:#fff}
+.hp-hero p,.home-premium .hp-hero p,.page-hero p{color:#e2e8f0}
+@media(max-width:600px){.hp-hero-shade{background:linear-gradient(90deg,color-mix(in srgb,var(--web-dark) 94%,transparent),color-mix(in srgb,var(--web-dark) 65%,transparent))}}

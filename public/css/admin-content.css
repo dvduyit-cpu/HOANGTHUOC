@@ -1,0 +1,28 @@
+.admin-body{--muted:#526176;--line:#d8e0eb;--bg:#eef2f7}
+.admin-main{color:#18243a}
+.admin-main .muted,.admin-main label small,.admin-main .form-section-title p,.admin-main .content-section-card p{color:#526176}
+.admin-main label{font-size:1em;font-weight:650;line-height:1.6}
+.admin-main input,.admin-main textarea,.admin-main select{font-size:1em;font-weight:400;line-height:1.6;color:#18243a;background:#fff;border-color:#9cabbf;min-height:46px}
+.admin-main input[type=checkbox]{min-height:17px}
+.admin-main input::placeholder,.admin-main textarea::placeholder{color:#64748b;opacity:1}
+.admin-main input:focus,.admin-main textarea:focus,.admin-main select:focus{outline:3px solid #bfdbfe;border-color:#2563eb}
+.admin-main th{color:#334155;background:#eaf0f7;font-size:.85em;letter-spacing:.03em}
+.admin-main td{color:#243449}
+.admin-main .table-wrap tbody tr:nth-child(even){background:#f7f9fc}
+.admin-main .table-wrap tbody tr:hover{background:#edf4ff}
+.admin-main .content-section-card{border-color:#c6d1df;box-shadow:0 2px 6px #18243a08}
+.admin-main .content-section-card h2{font-size:1.125em}
+.admin-main .content-section-card p{font-size:.9375em;line-height:1.7}
+.admin-main .content-section-card strong{font-size:.9375em}
+.admin-main .content-section-card:hover{border-color:#2563eb;box-shadow:0 3px 12px #18243a14}
+.admin-main .page-head p{font-size:1em}
+.admin-main .info-note{font-size:.9375em;color:#334155;background:#edf3fa}
+.content-editor .settings-section{padding:0;background:transparent;border:0}
+.content-editor .form-grid{gap:16px}
+.content-editor .form-grid>label{margin:0;padding:18px;background:#fff;border:1px solid #c6d1df;border-radius:10px;overflow-wrap:anywhere}
+.content-editor .form-grid>label:focus-within{border-color:#2563eb;box-shadow:0 0 0 2px #dbeafe}
+.content-editor .form-grid>label small{font-size:.875em;font-weight:400}
+.content-editor textarea{min-height:140px}
+.content-editor .editor-save{position:sticky;bottom:12px;z-index:12;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#fff;border:1px solid #c6d1df;border-radius:10px;padding:14px;box-shadow:0 4px 20px #18243a18;margin-top:20px}
+.content-editor .editor-save small{font-size:.875em;color:#526176}
+@media(max-width:720px){.content-editor .form-grid>label{padding:14px}.content-editor .editor-save{bottom:8px}}

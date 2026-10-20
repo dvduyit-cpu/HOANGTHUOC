@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin-workspace.css') }}?v={{ filemtime(public_path('css/admin-workspace.css')) }}">
     <script defer src="{{ asset('js/admin-workspace.js') }}?v={{ filemtime(public_path('js/admin-workspace.js')) }}"></script>
     @include('partials.admin-theme')
+    <link rel="stylesheet" href="{{ asset('css/admin-navigation.css') }}?v={{ filemtime(public_path('css/admin-navigation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-content.css') }}?v={{ filemtime(public_path('css/admin-content.css')) }}">
     <script defer src="{{ asset('js/password-toggle.js') }}?v={{ filemtime(public_path('js/password-toggle.js')) }}"></script>
 </head>
 <body class="admin-body" data-admin-user="{{ auth()->id() }}">

@@ -77,6 +77,19 @@
     colorInput?.addEventListener('input', () => setColor(colorInput.value));
     hexInput?.addEventListener('input', () => setColor(hexInput.value));
     const fonts = {system: '"Segoe UI", system-ui, sans-serif', arial: 'Arial, sans-serif', serif: 'Georgia, "Times New Roman", serif'};
+    const setSurface = input => {
+        const color = input.value;
+        if (!/^#[0-9a-f]{6}$/i.test(color)) return;
+        const channels = [1, 3, 5].map(index => parseInt(color.slice(index, index + 2), 16) / 255)
+            .map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+        const luminance = .2126 * channels[0] + .7152 * channels[1] + .0722 * channels[2];
+        root.style.setProperty(`--admin-${input.dataset.adminSurface}-bg`, color);
+        root.style.setProperty(`--admin-${input.dataset.adminSurface}-text`, luminance > .179 ? '#18243a' : '#ffffff');
+    };
+    document.querySelectorAll('[data-admin-surface]').forEach(input => {
+        input.addEventListener('input', () => setSurface(input));
+        setSurface(input);
+    });
     const setTypography = () => {
         root.style.setProperty('--app-font', fonts[fontInput.value] || fonts.system);
         root.style.setProperty('--font-scale', Number(sizeInput.value) / 16);
@@ -85,6 +98,10 @@
     sizeInput?.addEventListener('change', setTypography);
     document.querySelector('[data-reset-theme]')?.addEventListener('click', () => {
         setColor('#2563eb');
+        document.querySelectorAll('[data-admin-surface]').forEach(input => {
+            input.value = input.dataset.default;
+            setSurface(input);
+        });
         fontInput.value = 'system';
         sizeInput.value = '16';
         setTypography();

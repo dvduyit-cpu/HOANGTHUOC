@@ -25,6 +25,8 @@ class SiteSettingController extends Controller
             'site_description' => ['nullable', 'string', 'max:500'],
             'admin_footer' => ['nullable', 'string', 'max:500'],
             'admin_color' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'admin_header_color' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'admin_sidebar_color' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'admin_font' => ['required', 'in:system,arial,serif'],
             'admin_font_size' => ['required', 'integer', 'between:14,20'],
             'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],

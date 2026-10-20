@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'mau-sac' => [
+        'web_primary_color' => ['Màu chủ đạo (nút, liên kết)', 'color', '#146a9b'],
+        'web_heading_color' => ['Màu tiêu đề', 'color', '#102f43'],
+        'web_text_color' => ['Màu nội dung', 'color', '#597180'],
+        'web_background_color' => ['Màu nền trang', 'color', '#ffffff'],
+        'web_surface_color' => ['Màu nền các khối nội dung', 'color', '#edf4f5'],
+        'web_dark_color' => ['Màu nền đậm (banner, chân trang)', 'color', '#102f43'],
+    ],
     'trang-chu' => [
         'home_value_1_number' => ['Giá trị 1 - Số hiển thị', 'text', '01'],
         'home_value_1_number_size' => ['Giá trị 1 - Cỡ chữ số (px, 8-96)', 'number', 13],

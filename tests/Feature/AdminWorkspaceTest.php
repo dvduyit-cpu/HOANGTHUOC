@@ -31,6 +31,24 @@ class AdminWorkspaceTest extends TestCase
         $this->get('/admin/settings')->assertRedirect('/admin/login');
     }
 
+    public function test_header_and_menu_colors_are_saved_with_readable_text(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $this->put('/admin/settings', $this->configuration([
+            'admin_header_color' => '#000000', 'admin_sidebar_color' => '#ffffff',
+        ]))->assertSessionHasNoErrors();
+        $this->get('/admin')->assertOk()
+            ->assertSee('--admin-header-bg: #000000', false)
+            ->assertSee('--admin-header-text: #ffffff', false)
+            ->assertSee('--admin-sidebar-bg: #ffffff', false)
+            ->assertSee('--admin-sidebar-text: #18243a', false)
+            ->assertSee('admin-navigation.css');
+        $this->put('/admin/settings', $this->configuration([
+            'admin_header_color' => 'invalid', 'admin_sidebar_color' => 'red; color: blue',
+        ]))->assertSessionHasErrors(['admin_header_color', 'admin_sidebar_color']);
+        $this->assertDatabaseHas('site_settings', ['key' => 'admin_header_color', 'value' => '#000000']);
+    }
+
     public function test_admin_pages_render_with_the_new_navigation(): void
     {
         $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);

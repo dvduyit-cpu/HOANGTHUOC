@@ -13,6 +13,23 @@ class PageContentManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_website_colors_can_be_previewed_saved_and_validated(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $this->get('/admin/noi-dung/mau-sac')->assertOk()->assertSee('data-website-color', false);
+        $settings = ['web_primary_color' => '#a12345', 'web_background_color' => '#fafafa'];
+        $this->post('/admin/noi-dung/mau-sac/preview', ['settings' => $settings, 'preview_locale' => 'vi'])
+            ->assertOk()->assertSee('--web-primary: #a12345', false)->assertSee('css/home.css', false);
+        $this->assertDatabaseMissing('site_settings', ['key' => 'web_primary_color']);
+        $this->put('/admin/noi-dung/mau-sac', ['settings' => $settings])->assertSessionHasNoErrors();
+        foreach (['/', '/gioi-thieu', '/doi-ngu', '/tuyen-dung', '/tin-tuc', '/lien-he'] as $url) {
+            $this->get($url)->assertOk()->assertSee('--web-primary: #a12345', false);
+        }
+        $this->put('/admin/noi-dung/mau-sac', ['settings' => ['web_primary_color' => 'red; color: blue']])
+            ->assertSessionHasErrors('settings.web_primary_color');
+        $this->assertDatabaseHas('site_settings', ['key' => 'web_primary_color', 'value' => '#a12345']);
+    }
+
     public function test_preview_renders_draft_without_publishing_it(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));

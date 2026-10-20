@@ -16,6 +16,10 @@
             home_hero_image: '.hp-hero', culture_image: '.hp-culture',
             about_hero_image: '.page-hero-about', careers_hero_image: '.page-title',
             team_portrait_image: '.team-portrait, .team-founder, .team-story',
+            web_primary_color: '.hp-button:not(.hp-button-white), .hp-inline-link',
+            web_heading_color: '.hp-intro h2', web_text_color: '.hp-intro-copy p',
+            web_background_color: '.hp-intro', web_surface_color: '.hp-culture',
+            web_dark_color: '.hp-hero',
         };
         if (!target && imageTargets[activeKey]) target = doc.querySelector(imageTargets[activeKey]);
         if (!target) {
@@ -79,6 +83,31 @@
         timer = setTimeout(refresh, 400);
     }
     form.addEventListener('input', schedule);
+    form.querySelectorAll('[data-website-color]').forEach(picker => {
+        const hex = picker.parentElement.querySelector('[data-color-hex]');
+        picker.addEventListener('input', () => { hex.value = picker.value; });
+        hex.addEventListener('input', () => {
+            const valid = /^#[0-9a-fA-F]{6}$/.test(hex.value);
+            hex.setCustomValidity(valid ? '' : 'Nhập mã màu gồm # và 6 ký tự HEX.');
+            if (valid) {
+                picker.value = hex.value;
+                activeKey = picker.name.match(/\[([^\]]+)\]/)[1];
+            }
+        });
+        hex.addEventListener('focus', () => {
+            activeKey = picker.name.match(/\[([^\]]+)\]/)[1];
+            revealActive();
+        });
+    });
+    document.getElementById('reset-website-colors')?.addEventListener('click', () => {
+        form.querySelectorAll('[data-website-color]').forEach(picker => {
+            picker.value = picker.dataset.default;
+            const hex = picker.parentElement.querySelector('[data-color-hex]');
+            hex.value = picker.value;
+            hex.setCustomValidity('');
+        });
+        schedule();
+    });
     form.addEventListener('change', schedule);
     form.addEventListener('focusin', event => {
         const match = event.target.name?.match(/^(?:settings|uploads)\[([^\]]+)\]$/);
