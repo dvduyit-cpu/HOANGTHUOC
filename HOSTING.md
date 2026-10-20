@@ -1,5 +1,25 @@
 # Đưa website lên hosting
 
+## Cập nhật host đang chạy bằng Git
+
+Chạy trong thư mục chứa `artisan` trên host:
+
+```bash
+git pull --ff-only admin master
+php artisan optimize:clear
+php artisan migrate --force
+php artisan website:update-content --overwrite
+php artisan optimize
+```
+
+Nếu remote trên host tên `origin`, dùng `git pull --ff-only origin master`.
+`website:update-content --overwrite` cập nhật nội dung Việt/Anh được cung cấp,
+giữ lựa chọn ảnh và sản phẩm đã chỉnh, đồng thời thêm ảnh sản phẩm mẫu nếu chưa có.
+Lệnh in đường dẫn bản sao nội dung cũ trong `storage/app/private/deployment/backups`.
+Muốn chỉ bổ sung mục còn thiếu và giữ toàn bộ nội dung đang dùng, bỏ `--overwrite`.
+Giữ nguyên `.env` và `APP_KEY`; không chạy `migrate:fresh`, `db:seed` hay `key:generate`.
+Database, tài khoản, tin tuyển dụng, bài viết và hồ sơ vẫn được giữ.
+
 ## Nhập toàn bộ dữ liệu hiện tại
 
 Gói đã xuất nằm ở `storage/app/private/deployment/website.json`, gồm tài khoản (mật khẩu băm), quyền, cấu hình, nội dung, tin tuyển dụng, bài viết, hồ sơ ứng tuyển và các tệp ảnh/CV. Giữ gói ngoài thư mục `public`.
