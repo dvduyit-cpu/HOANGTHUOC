@@ -21,13 +21,18 @@
         text-wrap: wrap;
     }
 @if(in_array($pageAlignment, $validAlignments, true))
-    main, main :is(h1,h2,h3,h4,p,.eyebrow,.hp-kicker,.hp-value-number,.ecg-timeline li) { text-align: {{ $pageAlignment }}; }
+    main, main :is(p,.eyebrow,.hp-kicker,.hp-value-number,.ecg-timeline li) { text-align: {{ $pageAlignment }}; }
+    main :is(h1,h2,h3,h4,h5,h6) { text-align: {{ $pageAlignment === 'justify' ? 'left' : $pageAlignment }}; }
+    .hp-final :is(h2,h3), .team-product-card h3, .ecg-timeline h3 { text-align: center; }
 @endif
 @foreach($site as $alignmentKey => $alignmentValue)
     @if(str_ends_with($alignmentKey, '_alignment') && is_string($alignmentValue) && in_array($alignmentValue, $validAlignments, true))
         @php($textKey = substr($alignmentKey, 0, -10))
         @if(preg_match('/^[a-z0-9_]+$/', $textKey))
             [data-content-keys~="{{ $textKey }}"] { text-align: {{ $alignmentValue }}; }
+            @if($alignmentValue === 'justify')
+                :is(h1,h2,h3,h4,h5,h6)[data-content-keys~="{{ $textKey }}"] { text-align: left; }
+            @endif
         @endif
     @endif
 @endforeach
