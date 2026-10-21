@@ -1,1 +1,7 @@
 .new-job-page+.section{display:none}.article-detail h1{font-family:'Be Vietnam Pro','Segoe UI',Arial,sans-serif;font-weight:700}.contact-page+.section{display:none}
+
+/* Keep application labels together when the page content is justified. */
+.new-job-page .apply-card form label {
+    text-align: left;
+    text-align-last: left;
+}
