@@ -14,7 +14,7 @@ return [
         'banner' => ['name' => 'Banner giới thiệu', 'selector' => '.page-hero-about', 'keys' => ['about_hero_', 'about_eyebrow_', 'about_title_', 'about_block_1_']],
         'story' => ['name' => 'Câu chuyện về chúng tôi', 'selector' => '.about-story', 'keys' => ['about_story_', 'about_body_', 'about_block_2_', 'about_block_3_']],
         'values' => ['name' => 'Giá trị cốt lõi', 'selector' => '.values', 'keys' => ['about_block_4_', 'about_block_5_', 'about_block_6_', 'about_block_7_', 'about_block_8_', 'about_block_9_', 'about_block_10_', 'about_block_11_', 'about_block_12_', 'about_block_13_']],
-        'team' => ['name' => 'Lời mời gặp gỡ đội ngũ', 'selector' => '.team-invite', 'keys' => ['about_block_14_', 'about_block_15_']],
+        'team' => ['name' => 'Lời mời gặp gỡ đội ngũ', 'selector' => '.team-invite', 'keys' => ['about_team_', 'about_block_14_', 'about_block_15_']],
         'products' => ['name' => 'Giải pháp y khoa', 'selector' => '.about-products', 'keys' => ['medical_products_', 'team_block_10_', 'team_block_11_', 'team_block_12_']],
     ]],
     'doi-ngu' => ['root' => 'main', 'blocks' => [

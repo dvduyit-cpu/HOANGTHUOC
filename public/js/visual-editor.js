@@ -15,7 +15,7 @@
     let timer, pending, revision = 0, scrollTop = 0, activeKey = null, group = 'all', selectedKeys = [], dirty = false, submitting = false, mediaKey = null, dragItem = null;
     const imageTargets = {
         home_hero_image: '.hp-hero', culture_image: '.hp-culture', home_process_image: '#cung-dong-hanh', home_updates_image: '.hp-updates',
-        about_hero_image: '.page-hero-about', about_story_image: '.about-story-image', team_portrait_image: '.team-portrait', team_group_image: '.team-group-image',
+        about_hero_image: '.page-hero-about', about_story_image: '.about-story-image', about_team_background_image: '.team-invite', team_portrait_image: '.team-portrait', team_group_image: '.team-group-image',
         careers_hero_image: '.careers-hero', news_hero_image: '.news-hero', contact_hero_image: '.contact-hero',
     };
     const control = key => fields.get(key)?.querySelector(`[name="settings[${key}]"]:not([type="hidden"])`) || form.elements.namedItem(`settings[${key}]`);
@@ -86,8 +86,9 @@
             if (!target) return;
             let img = target.tagName === 'IMG' ? target : target.querySelector('img');
             if (!img) {
-                img = doc.createElement('img'); img.alt = ''; img.className = key === 'culture_image' ? 'culture-background' : 'editable-hero-image'; target.prepend(img);
+                img = doc.createElement('img'); img.alt = ''; img.className = key === 'culture_image' ? 'culture-background' : (key === 'about_team_background_image' ? 'team-invite-background' : 'editable-hero-image'); target.prepend(img);
                 if (key === 'culture_image') target.classList.add('hp-culture-photo');
+                if (key === 'about_team_background_image') target.classList.add('team-invite-photo');
             }
             img.src = url;
         });

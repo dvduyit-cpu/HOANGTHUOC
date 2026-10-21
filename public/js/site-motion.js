@@ -68,7 +68,7 @@
         '.job-card', '.news-card', '.about-story > *', '.team-story > *', '.team-group > *', '.value-grid article',
         '.contact-intro', '.contact-copy', '.contact-form-wrap', '.about-products > .eyebrow', '.about-products > h2', '.about-products .team-product-card',
         '.page-hero .container > *', '.page-title .container > *',
-        '.values > .container > .eyebrow', '.team-invite > *', '.journey > .container > .eyebrow', '.journey h2', '.timeline-scroll',
+        '.values > .container > .eyebrow', '.team-invite .container > *', '.journey > .container > .eyebrow', '.journey h2', '.timeline-scroll',
         '.positions-section > .section-head', '.positions-section > .search',
         '.article-header', '.article-cover', '.article-content', '.article-end',
         '.detail-card .hero-image', '.detail-card .card-body > *', '.apply-card',

@@ -1,4 +1,10 @@
 /* Editorial revision from the October 2026 company proposal. */
+.team-invite{position:relative;isolation:isolate}
+.team-invite-background{position:absolute;inset:0;z-index:0;width:100%;height:100%;object-fit:cover}
+.team-invite>.container{position:relative;z-index:2}
+.team-invite-photo:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,#102f43e6,#102f4380)}
+.team-invite.team-invite-photo h2,.team-invite.team-invite-photo .eyebrow{color:#fff}
+.team-invite-photo h2{max-width:720px}
 .contact-page .contact-grid{align-items:start;row-gap:32px}
 .contact-intro{grid-column:1/-1;min-width:0}
 .contact-intro h1{font-size:clamp(29px,3vw,42px);line-height:1.4;letter-spacing:-.04em;font-weight:700;margin:15px 0}

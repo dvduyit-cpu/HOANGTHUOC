@@ -55,6 +55,7 @@ câu chuyện nghề nghiệp?'],
         'home_block_26_vi' => ['Nội dung: Mang năng lực và sự tận tâm của bạn đến với đội ngũ chúng tôi.', 'textarea', 'Mang năng lực và sự tận tâm của bạn đến với đội ngũ chúng tôi.'],
     ],
     'gioi-thieu' => [
+        'about_team_background_image' => ['Ảnh nền phần Một hành trình – Một sứ mệnh', 'image', ''],
         'medical_products_layout' => ['Kiểu hiển thị Giải pháp y khoa', 'product_layout', 'three'],
         'about_story_image' => ['Ảnh riêng phần Câu chuyện về chúng tôi (không đổi ảnh bìa)', 'image', ''],
         'about_block_1_vi' => ['Nội dung: Cung cấp giải pháp stent mạch vành và thiết bị y tế kỹ thuật cao tiên tiến,', 'textarea', 'Cung cấp giải pháp stent mạch vành và thiết bị y tế kỹ thuật cao tiên tiến, đồng hành cùng các y bác sĩ nâng tầm chất lượng sống cho người bệnh.'],
