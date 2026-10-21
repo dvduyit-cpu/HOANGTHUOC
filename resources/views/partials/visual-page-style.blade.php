@@ -26,4 +26,19 @@
         [data-content-keys~="{{ $styleMatch[1] }}"] { color: {{ $styleValue }} !important; }
     @endif
 @endforeach
+@foreach(\App\Support\VisualEditor::imageAdjustments($site) as $adjustment)
+    @php($imageValues = $adjustment['values'])
+    @php($imageTarget = $adjustment['target'])
+    {{ $imageTarget['image'] }} {
+        @if(isset($imageValues['fit'])) object-fit: {{ $imageValues['fit'] }} !important; @endif
+        @if(isset($imageValues['x']) || isset($imageValues['y'])) object-position: {{ $imageValues['x'] ?? 50 }}% {{ $imageValues['y'] ?? 50 }}% !important; @endif
+        @if(isset($imageValues['height']) && !isset($imageTarget['frame'])) height: {{ $imageValues['height'] }}px !important; max-height: none !important; aspect-ratio: auto !important; @endif
+    }
+    @if(isset($imageValues['height'], $imageTarget['frame']))
+        {{ $imageTarget['frame'] }} { min-height: {{ $imageValues['height'] }}px !important; }
+    @endif
+    @if(isset($imageValues['overlay'], $imageTarget['overlay']))
+        {{ $imageTarget['overlay'] }} { background: rgba(16,47,67,{{ $imageValues['overlay'] / 100 }}) !important; }
+    @endif
+@endforeach
 </style>

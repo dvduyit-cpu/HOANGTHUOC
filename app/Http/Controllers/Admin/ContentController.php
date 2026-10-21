@@ -169,6 +169,12 @@ class ContentController extends Controller
             if ($field[1] === 'text_color') {
                 $rules['settings.'.$key] = ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'];
             }
+            if ($field[1] === 'image_fit') {
+                $rules['settings.'.$key] = ['nullable', 'in:cover,contain'];
+            }
+            if ($field[1] === 'image_number') {
+                $rules['settings.'.$key] = ['nullable', 'integer', 'between:'.$field[2].','.$field[3]];
+            }
             if ($field[1] === 'layout') {
                 $allowed = array_keys(VisualEditor::blocks($field[2]));
                 $rules['settings.'.$key] = ['nullable', 'string', 'max:10000', function ($attribute, $value, $fail) use ($allowed) {
@@ -236,6 +242,14 @@ class ContentController extends Controller
         }
         $result['content_alignment_'.$section] = ['Canh chữ mặc định cho toàn trang', 'alignment'];
         foreach ($result as $key => $field) {
+            if ($field[1] === 'image' && isset(VisualEditor::imageTargets()[$key])) {
+                $target = VisualEditor::imageTargets()[$key];
+                $result[$key.'_image_fit'] = ['Cách hiển thị ảnh', 'image_fit'];
+                $result[$key.'_image_x'] = ['Vị trí ngang (0: trái · 50: giữa · 100: phải)', 'image_number', 0, 100];
+                $result[$key.'_image_y'] = ['Vị trí dọc (0: trên · 50: giữa · 100: dưới)', 'image_number', 0, 100];
+                $result[$key.'_image_height'] = [isset($target['frame']) ? 'Chiều cao tối thiểu của khung nền (px)' : 'Chiều cao ảnh (px)', 'image_number', 120, 1200];
+                if (isset($target['overlay'])) $result[$key.'_image_overlay'] = ['Độ tối lớp phủ nền (0–90%)', 'image_number', 0, 90];
+            }
             if (in_array($field[1], ['text', 'textarea'], true) && !str_ends_with($key, '_en')) {
                 $result[$key.'_alignment'] = ['Canh chữ: '.$field[0], 'alignment'];
                 $result[$key.'_font_size'] = ['Cỡ chữ (px): '.$field[0], 'number'];

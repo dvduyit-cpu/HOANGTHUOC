@@ -85,4 +85,32 @@ class VisualEditorTest extends TestCase
         $this->post('/admin/noi-dung/trang-chu/restore')->assertForbidden();
         $this->delete('/admin/noi-dung/trang-chu/draft')->assertForbidden();
     }
+
+    public function test_image_fitting_position_height_and_overlay_can_be_adjusted(): void
+    {
+        $this->admin();
+        $this->get('/admin/noi-dung/trang-chu')->assertOk()
+            ->assertSee('settings[home_hero_image_image_fit]', false)
+            ->assertSee('data-image-adjustment', false);
+        $settings = [
+            'home_hero_image_image_fit' => 'contain', 'home_hero_image_image_x' => '0',
+            'home_hero_image_image_y' => '75', 'home_hero_image_image_height' => '650',
+            'home_hero_image_image_overlay' => '0',
+        ];
+        $this->post('/admin/noi-dung/trang-chu/preview', ['settings' => $settings, 'preview_locale' => 'vi'])
+            ->assertOk()->assertSee('object-fit: contain !important;', false)
+            ->assertSee('object-position: 0% 75% !important;', false)
+            ->assertSee('min-height: 650px !important;', false)
+            ->assertSee('rgba(16,47,67,0)', false);
+        $this->assertDatabaseMissing('site_settings', ['key' => 'home_hero_image_image_fit']);
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => $settings])->assertSessionHasNoErrors();
+        $this->get('/')->assertSee('object-position: 0% 75% !important;', false);
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => [
+            'home_hero_image_image_fit' => 'invalid', 'home_hero_image_image_x' => -1,
+            'home_hero_image_image_height' => 9999, 'home_hero_image_image_overlay' => 95,
+        ]])->assertSessionHasErrors(['settings.home_hero_image_image_fit', 'settings.home_hero_image_image_x', 'settings.home_hero_image_image_height', 'settings.home_hero_image_image_overlay']);
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => array_fill_keys(array_keys($settings), '')])
+            ->assertSessionHasNoErrors();
+        $this->get('/')->assertDontSee('object-position: 0% 75% !important;', false);
+    }
 }

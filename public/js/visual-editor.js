@@ -20,7 +20,7 @@
         careers_hero_image: '.careers-hero', news_hero_image: '.news-hero', contact_hero_image: '.contact-hero',
     };
     const control = key => fields.get(key)?.querySelector(`[name="settings[${key}]"]:not([type="hidden"])`) || form.elements.namedItem(`settings[${key}]`);
-    const baseKey = key => key.replace(/_(alignment|font_size|text_color)$/, '').replace(/_en$/, '_vi');
+    const baseKey = key => key.replace(/_(alignment|font_size|text_color|image_fit|image_x|image_y|image_height|image_overlay)$/, '').replace(/_en$/, '_vi');
     const localizedKey = key => locale.value === 'en' && fields.has(key.replace(/_vi$/, '_en')) ? key.replace(/_vi$/, '_en') : key;
     function markDirty() {dirty = true; saveState.textContent = 'Có thay đổi chưa lưu'; saveState.classList.add('is-dirty');}
     function setTab(tab) {
@@ -217,6 +217,11 @@
         dialog.close(); markDirty(); schedule();
     }));
     form.querySelectorAll('[data-text-color-picker]').forEach(picker => picker.addEventListener('input', () => {const input = picker.parentElement.querySelector('input[name]'); input.value = picker.value; input.dispatchEvent(new Event('input', {bubbles: true}));}));
+    form.querySelectorAll('[data-image-adjustment]').forEach(slider => {
+        const input = slider.parentElement.querySelector('input[name]');
+        slider.addEventListener('input', () => {input.value = slider.value; activeKey = input.name.match(/\[([^\]]+)\]/)[1]; input.dispatchEvent(new Event('input', {bubbles: true}));});
+        input.addEventListener('input', () => {if (input.value !== '') slider.value = input.value;});
+    });
     form.querySelectorAll('[data-reset-style]').forEach(button => button.addEventListener('click', () => {const input = button.parentElement.querySelector('input[name]'); input.value = ''; input.dispatchEvent(new Event('input', {bubbles: true}));}));
     form.querySelectorAll('[data-website-color]').forEach(picker => {
         const hex = picker.parentElement.querySelector('[data-color-hex]'); picker.addEventListener('input', () => hex.value = picker.value);
