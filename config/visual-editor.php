@@ -6,7 +6,7 @@ return [
         'opportunities' => ['name' => 'Thông báo tuyển dụng', 'selector' => '.hp-opportunity', 'keys' => []],
         'values' => ['name' => 'Chuẩn mực y khoa', 'selector' => '#cung-dong-hanh', 'keys' => ['home_intro_', 'home_value_', 'home_process_image', 'home_standards_', 'home_block_2_', 'home_block_3_', 'home_block_4_', 'home_block_5_', 'home_block_6_', 'home_block_7_', 'home_block_8_']],
         'culture' => ['name' => 'Con người & văn hóa', 'selector' => '.hp-culture', 'keys' => ['culture_', 'home_block_9_', 'home_block_10_', 'home_block_11_', 'home_block_12_']],
-        'process' => ['name' => 'Hành trình ứng tuyển', 'selector' => '.hp-process', 'keys' => ['home_block_13_', 'home_block_14_', 'home_block_15_', 'home_block_16_', 'home_block_17_', 'home_block_18_', 'home_block_19_', 'home_block_20_', 'home_block_21_']],
+        'process' => ['name' => 'Hành trình ứng tuyển', 'selector' => '.hp-process', 'keys' => ['home_journey_', 'home_block_13_', 'home_block_14_', 'home_block_15_', 'home_block_16_', 'home_block_17_', 'home_block_18_', 'home_block_19_', 'home_block_20_', 'home_block_21_']],
         'news' => ['name' => 'Câu chuyện & cập nhật', 'selector' => '.hp-updates', 'keys' => ['home_updates_', 'home_block_22_', 'home_block_23_']],
         'call-to-action' => ['name' => 'Lời mời đồng hành', 'selector' => '.hp-final', 'keys' => ['home_block_24_', 'home_block_25_', 'home_block_26_']],
     ]],

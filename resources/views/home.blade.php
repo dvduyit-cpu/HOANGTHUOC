@@ -48,10 +48,12 @@
     <div class="hp-culture-mark" aria-hidden="true"><span data-content-keys="home_block_9_vi">{{ $site['home_block_9_vi'] }}</span><span data-content-keys="home_block_10_vi">{{ $site['home_block_10_vi'] }}</span><span data-content-keys="home_block_11_vi">{{ $site['home_block_11_vi'] }}</span><i>H<span>+</span></i></div>
     <div class="hp-culture-copy"><span class="hp-kicker" data-content-keys="home_block_12_vi">{{ $site['home_block_12_vi'] }}</span><h2 id="culture-heading" data-content-keys="culture_title_vi">{{ ($site['culture_title_vi'] ?? '') ?: 'Chúng tôi tin rằng con người là trọng tâm.' }}</h2><p data-content-keys="culture_body_vi">{{ ($site['culture_body_vi'] ?? '') ?: 'Một hành trình nghề nghiệp tốt được tạo nên từ đội ngũ cùng chí hướng, sự tin cậy và những trải nghiệm đáng tự hào mỗi ngày.' }}</p><a class="hp-inline-link" href="{{ route('team') }}">{{ __('Đội ngũ tại') }} {{ $site['company_name'] ?? 'Hoang Thuoc Medical' }} <span aria-hidden="true">↗</span></a></div>
 </div></section>
-<section class="container hp-process" aria-labelledby="process-heading">
+<section class="hp-process {{ !empty($site['home_journey_background_image']) ? 'hp-process-photo' : '' }}" aria-labelledby="process-heading">
+    @if(!empty($site['home_journey_background_image']))<img class="hp-journey-background" data-content-keys="home_journey_background_image" src="{{ asset('storage/'.$site['home_journey_background_image']) }}" alt="" loading="lazy">@endif
+    <div class="container">
     <div class="hp-section-head"><div><span class="hp-kicker" data-content-keys="home_block_13_vi">{{ $site['home_block_13_vi'] }}</span><h2 id="process-heading" data-content-keys="home_block_14_vi">{{ $site['home_block_14_vi'] }}</h2></div><p data-content-keys="home_block_15_vi">{{ $site['home_block_15_vi'] }}</p></div>
     <ol class="hp-steps"><li><span>01</span><h3 data-content-keys="home_block_16_vi">{{ $site['home_block_16_vi'] }}</h3><p data-content-keys="home_block_17_vi">{{ $site['home_block_17_vi'] }}</p></li><li><span>02</span><h3 data-content-keys="home_block_18_vi">{{ $site['home_block_18_vi'] }}</h3><p data-content-keys="home_block_19_vi">{{ $site['home_block_19_vi'] }}</p></li><li><span>03</span><h3 data-content-keys="home_block_20_vi">{{ $site['home_block_20_vi'] }}</h3><p data-content-keys="home_block_21_vi">{{ $site['home_block_21_vi'] }}</p></li></ol>
-</section>
+</div></section>
 @if($latestNews->isNotEmpty())
 <section class="hp-updates hp-photo-section">
     <img class="hp-section-background" src="{{ !empty($site['home_updates_image']) ? asset('storage/'.$site['home_updates_image']) : asset('images/hero-healthcare-team.png') }}" alt="" loading="lazy">

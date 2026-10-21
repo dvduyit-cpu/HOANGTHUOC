@@ -13,6 +13,7 @@ return [
         'home_standards_white_background' => ['Dùng nền trắng cho phần Chuẩn Mực Y Khoa (bỏ tích để dùng ảnh)', 'checkbox', '0'],
         'home_process_image' => ['Ảnh nền toàn phần Chuẩn mực y khoa (tiêu đề và 3 ô 01–03)', 'image', ''],
         'home_updates_image' => ['Ảnh nền Câu chuyện & cập nhật', 'image', ''],
+        'home_journey_background_image' => ['Ảnh nền phần Đồng hành cùng Hoàng Thuộc Medical (tiêu đề và 3 bước)', 'image', ''],
         'home_value_1_number' => ['Giá trị 1 - Số hiển thị', 'text', '01'],
         'home_value_1_number_size' => ['Giá trị 1 - Cỡ chữ số (px, 8-96)', 'number', 13],
         'home_value_1_title_size' => ['Giá trị 1 - Cỡ chữ tiêu đề (px, 8-96)', 'number', 20],
