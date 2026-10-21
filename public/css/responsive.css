@@ -25,9 +25,13 @@ main input,main select,main textarea{min-width:0;max-width:100%}
     .site-header .primary-nav{width:100%;flex-wrap:wrap;justify-content:flex-start;gap:8px 20px;overflow:visible;padding:10px 0}
     .site-header .primary-nav a{display:flex;align-items:center;min-height:44px;font-size:14px;padding:8px 10px}
     .site-header .primary-nav a:after{bottom:0}
-    .navigation-ready .site-menu-toggle{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:8px 14px;border:1px solid #c6dbe5;border-radius:6px;background:#fff;color:#173e53;font:inherit;font-size:14px;cursor:pointer;margin-left:auto}
-    .navigation-ready .primary-nav{display:none}
-    .navigation-ready .primary-nav.is-open{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid #dbe6eb;gap:8px}
+    .navigation-ready .site-menu-toggle{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:8px 14px;border:1px solid #c6dbe5;border-radius:6px;background:#fff;color:#173e53;font:inherit;font-size:14px;cursor:pointer;margin-left:0;order:0}
+    .navigation-ready .nav-rebuild>.brand{order:1;margin-left:auto}
+    .navigation-ready .nav-rebuild>.primary-nav{order:2;flex-basis:100%}
+    .navigation-ready .nav-rebuild{position:relative}
+    .navigation-ready .site-header .primary-nav{display:grid;grid-template-columns:minmax(0,1fr);position:absolute;top:100%;left:0;right:0;width:100%;max-height:calc(100dvh - 90px);overflow-y:auto;overflow-x:hidden;padding:10px;background:#fff;border:1px solid #dbe6eb;box-shadow:0 12px 24px #0d273a14;gap:4px;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease;z-index:30}
+    .navigation-ready .site-header .primary-nav.is-open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+    ::view-transition-group(root),::view-transition-old(root),::view-transition-new(root){animation:none}
     .site-menu-toggle:focus-visible{outline:3px solid #126aa2;outline-offset:3px}
     .contact-grid{grid-template-columns:1fr;gap:32px}.contact-copy>p{max-width:none}
     .hp-intro,.hp-culture-inner{gap:35px}.hp-values article,.hp-values article+article{padding-right:18px;padding-left:18px}

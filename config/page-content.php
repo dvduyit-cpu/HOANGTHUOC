@@ -71,6 +71,11 @@ Một sứ mệnh.'],
         'about_hero_image' => ['Ảnh banner đội ngũ y tế', 'image', ''],
     ],
     'doi-ngu' => [
+        'team_group_enabled' => ['Khối 2 — Bật / tắt hiển thị', 'toggle', '1'],
+        'team_group_eyebrow_vi' => ['Khối 2 — Nhãn phía trên tiêu đề', 'text', 'CON NGƯỜI HOÀNG THUỘC'],
+        'team_group_title_vi' => ['Khối 2 — Tiêu đề bên trái', 'textarea', 'Cùng nhau tiếp nối hành trình.'],
+        'team_group_image' => ['Khối 2 — Ảnh bên phải', 'image', ''],
+        'team_group_description_vi' => ['Khối 2 — Nội dung bên trái', 'textarea', 'Đội ngũ Hoàng Thuộc Medical cùng đồng hành với tinh thần tận tâm, trách nhiệm và không ngừng phát triển chuyên môn.'],
         'team_block_1_vi' => ['Tiêu đề / nhãn: HOÀNG THUỘC MEDICAL / ĐỘI NGŨ', 'text', 'HOÀNG THUỘC MEDICAL / ĐỘI NGŨ'],
         'team_block_2_vi' => ['Tiêu đề / nhãn: MỘT HÀNH TRÌNH. MỘT SỨ MỆNH. NHỮNG NHỊP TIM.', 'textarea', 'MỘT HÀNH TRÌNH.
 MỘT SỨ MỆNH.
@@ -92,9 +97,6 @@ từng nhịp tim.'],
         'team_stage_3_vi' => ['Timeline: mốc 3', 'text', 'CHUYÊN SÂU'],
         'team_stage_4_vi' => ['Timeline: mốc 4', 'text', 'PHÁT TRIỂN'],
         'team_stage_5_vi' => ['Timeline: mốc 5', 'text', 'TƯƠNG LAI'],
-        'team_product_image_1' => ['Ảnh sản phẩm 1', 'image', ''],
-        'team_product_image_2' => ['Ảnh sản phẩm 2', 'image', ''],
-        'team_product_image_3' => ['Ảnh sản phẩm 3', 'image', ''],
     ],
     'tuyen-dung' => [
         'careers_block_1_vi' => ['Tiêu đề / nhãn: CƠ HỘI NGHỀ NGHIỆP', 'text', 'CƠ HỘI NGHỀ NGHIỆP'],

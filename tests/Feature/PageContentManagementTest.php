@@ -132,8 +132,38 @@ class PageContentManagementTest extends TestCase
         $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
         $this->put('/admin/noi-dung/doi-ngu', [
             'settings' => ['team_portrait_image' => '../../private.jpg'],
-            'uploads' => ['team_product_image_1' => UploadedFile::fake()->create('script.php', 1)],
-        ])->assertSessionHasErrors(['settings.team_portrait_image', 'uploads.team_product_image_1']);
+            'uploads' => ['team_group_image' => UploadedFile::fake()->create('script.php', 1)],
+        ])->assertSessionHasErrors(['settings.team_portrait_image', 'uploads.team_group_image']);
         $this->assertDatabaseMissing('site_settings', ['key' => 'team_portrait_image']);
+    }
+
+    public function test_team_group_image_and_description_can_be_managed(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $this->get('/admin/noi-dung/doi-ngu')->assertOk()
+            ->assertSee('uploads[team_group_image]', false)
+            ->assertSee('settings[team_group_description_vi]', false);
+        $this->put('/admin/noi-dung/doi-ngu', [
+            'uploads' => [
+                'team_group_image' => UploadedFile::fake()->image('team.jpg'),
+            ],
+            'settings' => ['team_group_description_vi' => "Đội ngũ của chúng tôi\n<script>alert(1)</script>"],
+        ])->assertSessionHasNoErrors();
+        $path = SiteSetting::values()['team_group_image'];
+        Storage::disk('public')->assertExists($path);
+        $this->get('/doi-ngu')->assertOk()
+            ->assertSeeInOrder(['Đội ngũ của chúng tôi', asset('storage/'.$path), 'ecg-timeline'])
+            ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false);
+        $this->put('/admin/noi-dung/doi-ngu', ['settings' => ['team_group_enabled' => '0']])
+            ->assertSessionHasNoErrors();
+        $this->get('/doi-ngu')->assertDontSee(asset('storage/'.$path))->assertDontSee('Đội ngũ của chúng tôi');
+        $this->put('/admin/noi-dung/doi-ngu', ['settings' => ['team_group_enabled' => '1']])
+            ->assertSessionHasNoErrors();
+        $this->get('/doi-ngu')->assertSee(asset('storage/'.$path));
+        $this->put('/admin/noi-dung/doi-ngu', ['settings' => [
+            'team_group_image' => '', 'team_group_description_vi' => '',
+        ]])->assertSessionHasNoErrors();
+        $this->get('/doi-ngu')->assertSee(asset('images/hero-healthcare-team.png'));
     }
 }
