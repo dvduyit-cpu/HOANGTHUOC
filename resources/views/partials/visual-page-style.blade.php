@@ -24,6 +24,9 @@
         [data-content-keys~="{{ $styleMatch[1] }}"] { font-size: {{ (int) $styleValue }}px !important; }
     @elseif(preg_match('/^([a-z0-9_]+)_text_color$/', $styleKey, $styleMatch) && is_string($styleValue) && preg_match('/^#[0-9a-fA-F]{6}$/', $styleValue))
         [data-content-keys~="{{ $styleMatch[1] }}"] { color: {{ $styleValue }} !important; }
+    @elseif(preg_match('/^([a-z0-9_]+)_text_width$/', $styleKey, $styleMatch) && filter_var($styleValue, FILTER_VALIDATE_INT) !== false && (int) $styleValue >= 30 && (int) $styleValue <= 100)
+        [data-content-keys~="{{ $styleMatch[1] }}"] { width: {{ (int) $styleValue }}%; max-width: {{ (int) $styleValue }}% !important; text-wrap: wrap; }
+        :is(h1,h2,h3,h4,h5,h6)[data-content-keys~="{{ $styleMatch[1] }}"] { white-space: normal; }
     @endif
 @endforeach
 @foreach(\App\Support\VisualEditor::imageAdjustments($site) as $adjustment)

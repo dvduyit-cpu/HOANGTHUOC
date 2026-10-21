@@ -178,7 +178,7 @@ class ContentController extends Controller
             if ($field[1] === 'image_fit') {
                 $rules['settings.'.$key] = ['nullable', 'in:cover,contain'];
             }
-            if ($field[1] === 'image_number') {
+            if (in_array($field[1], ['image_number', 'text_width'], true)) {
                 $rules['settings.'.$key] = ['nullable', 'integer', 'between:'.$field[2].','.$field[3]];
             }
             if ($field[1] === 'layout') {
@@ -260,6 +260,7 @@ class ContentController extends Controller
                 $result[$key.'_alignment'] = ['Canh chữ: '.$field[0], 'alignment'];
                 $result[$key.'_font_size'] = ['Cỡ chữ (px): '.$field[0], 'number'];
                 $result[$key.'_text_color'] = ['Màu chữ: '.$field[0], 'text_color'];
+                $result[$key.'_text_width'] = ['Chiều rộng chữ (%) — 100% để trải ngang khung', 'text_width', 30, 100];
             }
         }
         if (VisualEditor::blocks($section)) {

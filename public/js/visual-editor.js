@@ -20,7 +20,7 @@
         careers_hero_image: '.careers-hero', news_hero_image: '.news-hero', contact_hero_image: '.contact-hero',
     };
     const control = key => fields.get(key)?.querySelector(`[name="settings[${key}]"]:not([type="hidden"])`) || form.elements.namedItem(`settings[${key}]`);
-    const baseKey = key => key.replace(/_(alignment|font_size|text_color|image_fit|image_x|image_y|image_height|image_overlay)$/, '').replace(/_en$/, '_vi');
+    const baseKey = key => key.replace(/_(alignment|font_size|text_color|text_width|image_fit|image_x|image_y|image_height|image_overlay)$/, '').replace(/_en$/, '_vi');
     const localizedKey = key => locale.value === 'en' && fields.has(key.replace(/_vi$/, '_en')) ? key.replace(/_vi$/, '_en') : key;
     function markDirty() {dirty = true; saveState.textContent = 'Có thay đổi chưa lưu'; saveState.classList.add('is-dirty');}
     function setTab(tab) {

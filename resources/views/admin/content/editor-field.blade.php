@@ -19,9 +19,9 @@
         <select id="field_{{ $key }}" name="settings[{{ $key }}]">
             <option value="">Theo giao diện mặc định</option><option value="cover" @selected($value === 'cover')>Phủ kín khung (có thể cắt mép ảnh)</option><option value="contain" @selected($value === 'contain')>Hiển thị toàn bộ ảnh</option>
         </select>
-    @elseif($field[1] === 'image_number')
+    @elseif(in_array($field[1], ['image_number', 'text_width'], true))
         <div class="editor-image-adjustment">
-            <input type="range" min="{{ $field[2] }}" max="{{ $field[3] }}" value="{{ filled($value) ? $value : ($field[3] === 1200 ? 500 : 50) }}" data-image-adjustment aria-label="{{ $field[0] }}">
+            <input type="range" min="{{ $field[2] }}" max="{{ $field[3] }}" value="{{ filled($value) ? $value : ($field[1] === 'text_width' ? 100 : ($field[3] === 1200 ? 500 : 50)) }}" data-image-adjustment aria-label="{{ $field[0] }}">
             <input id="field_{{ $key }}" type="number" name="settings[{{ $key }}]" value="{{ $value }}" min="{{ $field[2] }}" max="{{ $field[3] }}" step="1" placeholder="Mặc định">
             <button type="button" data-reset-style class="ghost-btn">Mặc định</button>
         </div><small>Kéo thanh trượt hoặc nhập số. Để trống để dùng giao diện gốc.</small>
