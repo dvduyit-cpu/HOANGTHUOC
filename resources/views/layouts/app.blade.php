@@ -13,6 +13,9 @@
 <link rel="stylesheet" href="{{ asset('css/medical-update.css') }}?v={{ filemtime(public_path('css/medical-update.css')) }}">
 <link rel="stylesheet" href="{{ asset('css/responsive.css') }}?v={{ filemtime(public_path('css/responsive.css')) }}">
 @include('partials.website-theme')
+@if(request()->routeIs('contact.*') || (request()->routeIs('admin.content.preview') && request()->route('section') === 'lien-he'))
+<link rel="stylesheet" href="{{ asset('css/contact.css') }}?v={{ filemtime(public_path('css/contact.css')) }}">
+@endif
 @include('partials.content-alignment')
 <script defer src="{{ asset('js/product-slider.js') }}?v={{ filemtime(public_path('js/product-slider.js')) }}"></script>
 </head>

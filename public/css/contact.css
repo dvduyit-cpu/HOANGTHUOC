@@ -1,0 +1,27 @@
+.contact-page.contact-page-modern{background:var(--web-background,#fff);padding:48px 0 80px}
+.contact-page-modern .contact-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:start}
+.contact-page-modern .contact-intro{padding-bottom:8px}
+.contact-page-modern .contact-intro>p{max-width:920px;font-size:17px;color:var(--web-text,#597180);line-height:1.9}
+.contact-page-modern .contact-information-card,.contact-page-modern .contact-form-wrap{padding:32px;border:1px solid #dce7ec;border-radius:8px;box-shadow:0 12px 36px #102f4308}
+.contact-page-modern .contact-information-card{background:var(--web-surface,#edf4f5)}
+.contact-page-modern .contact-form-wrap{background:#fff}
+.contact-page-modern h2{font-size:clamp(24px,2.3vw,30px);line-height:1.4;margin:0 0 18px;font-weight:600;letter-spacing:-.025em}
+.contact-page-modern .contact-details{margin:20px 0 0;padding:4px 0 0;border-color:#ccdfe7}
+.contact-page-modern .contact-details p{padding:18px 0;margin:0;border-bottom:1px solid #d6e3e9;grid-template-columns:38px minmax(0,1fr);column-gap:12px}
+.contact-page-modern .contact-details svg{width:22px;height:22px;margin-top:3px;color:var(--web-primary,#146a9b)}
+.contact-page-modern .contact-details strong{font-size:11px;letter-spacing:.12em}
+.contact-page-modern .contact-details a{font-size:14px;line-height:1.85}
+.contact-page-modern .contact-map{background:#fff;padding:20px;margin-top:26px;transition:border-color .3s ease,box-shadow .3s ease}
+.contact-page-modern .contact-map:hover{border-color:var(--web-primary,#146a9b);box-shadow:0 6px 18px #102f430c}
+.contact-page-modern .contact-map small{line-height:1.8;margin-top:6px}
+.contact-page-modern .contact-form-wrap>.eyebrow{display:block;color:var(--web-primary,#146a9b);margin-bottom:12px}
+.contact-page-modern .contact-form-description{font-size:14px;line-height:1.85;color:var(--web-text,#597180);margin:0 0 26px}
+.contact-page-modern form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.contact-page-modern form label{display:flex;flex-direction:column;gap:8px;min-width:0;margin:0;font-size:13px;font-weight:600;color:var(--web-heading,#102f43)}
+.contact-page-modern form label:has(textarea),.contact-page-modern .field-error,.contact-page-modern form>.btn{grid-column:1/-1}
+.contact-page-modern form :is(input,select,textarea){width:100%;font:inherit;font-weight:400;font-size:14px;color:var(--web-heading,#102f43);background:#fbfdfe;border:1px solid #ccdae2;border-radius:5px;padding:12px 13px;min-height:46px}
+.contact-page-modern textarea{resize:vertical;min-height:145px}
+.contact-page-modern .contact-form-wrap .btn{width:100%;min-height:50px;margin:4px 0 0;border-radius:5px;background:var(--web-primary,#146a9b);font-weight:600}
+.contact-page-modern .contact-form-wrap .btn:hover{background:color-mix(in srgb,var(--web-primary,#146a9b),#000 18%)}
+@media(max-width:900px){.contact-page-modern .contact-grid{grid-template-columns:1fr;gap:26px}.contact-page.contact-page-modern{padding:34px 0 55px}}
+@media(max-width:550px){.contact-page-modern .contact-information-card,.contact-page-modern .contact-form-wrap{padding:24px 20px}.contact-page-modern form{grid-template-columns:1fr}.contact-page-modern .contact-intro>p{font-size:15px}}

@@ -84,5 +84,8 @@ return [
     'news_block_2_en' => 'News & stories',
     'news_block_3_en' => 'Stories about our people, culture and the journey we are building together at Hoang Thuoc Medical.',
     'contact_block_1_en' => 'CONTACT',
+    'contact_form_eyebrow_en' => 'LET’S CONNECT',
+    'contact_form_title_en' => 'Send us a message',
+    'contact_form_body_en' => 'Leave your details and tell us what you would like to discuss. The Hoang Thuoc Medical team will get in touch.',
     'contact_block_2_en' => 'CONTACT INFORMATION',
 ];

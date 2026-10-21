@@ -9,7 +9,7 @@ class NewsController extends Controller
 {
     public function index(): View
     {
-        return view('pages.news', ['posts' => News::public()->latest('published_at')->paginate(9)]);
+        return view('pages.news', ['posts' => News::public()->latest('published_at')->latest('id')->paginate(9)]);
     }
 
     public function show(string $slug): View

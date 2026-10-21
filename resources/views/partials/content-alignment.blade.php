@@ -9,9 +9,17 @@
         default => '',
     };
     $validAlignments = ['left', 'center', 'right', 'justify'];
-    $pageAlignment = $site['content_alignment_'.$contentSection] ?? 'inherit';
+    $pageAlignment = $site['content_alignment_'.$contentSection] ?? 'justify';
+    if ($pageAlignment === 'inherit' || $pageAlignment === '') {
+        $pageAlignment = 'justify';
+    }
 @endphp
 <style>
+    :where(main p, main .prose, main .article-content, .footer p) {
+        text-align: justify;
+        text-justify: inter-word;
+        text-wrap: wrap;
+    }
 @if(in_array($pageAlignment, $validAlignments, true))
     main, main :is(h1,h2,h3,h4,p,.eyebrow,.hp-kicker,.hp-value-number,.ecg-timeline li) { text-align: {{ $pageAlignment }}; }
 @endif
@@ -23,4 +31,5 @@
         @endif
     @endif
 @endforeach
+    #about-story-heading { text-align: left; }
 </style>

@@ -18,6 +18,7 @@
             home_process_image: '#cung-dong-hanh', home_standards_white_background: '#cung-dong-hanh', home_updates_image: '.hp-updates',
             about_hero_image: '.page-hero-about', careers_hero_image: '.careers-hero', news_hero_image: '.news-hero',
             about_story_image: '.about-story-image',
+            contact_hero_image: '.contact-hero',
             team_portrait_image: '.team-portrait, .team-founder, .team-story',
             web_primary_color: '.hp-button:not(.hp-button-white), .hp-inline-link',
             web_heading_color: '.hp-intro h2', web_text_color: '.hp-intro-copy p',

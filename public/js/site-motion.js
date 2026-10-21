@@ -66,7 +66,7 @@
         '.hp-intro > div', '.hp-values article', '.hp-culture-inner > div',
         '.hp-section-head', '.hp-steps li', '.hp-news-item', '.hp-final > *',
         '.job-card', '.news-card', '.about-story > *', '.team-story > *', '.team-group > *', '.value-grid article',
-        '.contact-copy', '.contact-form-wrap', '.about-products > .eyebrow', '.about-products > h2', '.about-products .team-product-card',
+        '.contact-intro', '.contact-copy', '.contact-form-wrap', '.about-products > .eyebrow', '.about-products > h2', '.about-products .team-product-card',
         '.page-hero .container > *', '.page-title .container > *',
         '.values > .container > .eyebrow', '.team-invite > *', '.journey > .container > .eyebrow', '.journey h2', '.timeline-scroll',
         '.positions-section > .section-head', '.positions-section > .search',
@@ -79,7 +79,7 @@
     targets.forEach(element => {
         // Content with keyboard focus stays visible throughout interaction.
         if (element.contains(document.activeElement)) return;
-        if (element.matches('.about-story > :first-child, .team-story > :first-child, .team-group > :first-child, .contact-copy, .page-hero h1, .page-title h1, .article-header, .positions-section > .section-head')) {
+        if (element.matches('.about-story > :first-child, .team-story > :first-child, .team-group > :first-child, .contact-intro, .contact-copy, .page-hero h1, .page-title h1, .article-header, .positions-section > .section-head')) {
             element.classList.add('site-reveal-from-left');
         }
         if (element.matches('.about-story > :last-child, .team-story > :last-child, .team-group > :last-child, .contact-form-wrap, .apply-card, .careers-hero p, .careers-intro > p, .news-intro > p, .positions-section > .search')) {
