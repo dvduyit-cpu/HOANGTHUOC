@@ -80,6 +80,12 @@ class ContentController extends Controller
             });
         } catch (\Throwable $exception) {
             Storage::disk('public')->delete($uploadedPaths);
+            if ($exception instanceof \Illuminate\Database\QueryException && (string) ($exception->errorInfo[0] ?? $exception->getCode()) === '22001') {
+                report($exception);
+                return back()->withInput($request->input())->withErrors([
+                    'settings' => 'Database trên hosting chưa đủ dung lượng cho bản nháp/lịch sử. Sau khi upload bản cập nhật, hãy chạy php artisan migrate --force rồi lưu lại.',
+                ]);
+            }
             throw $exception;
         }
 

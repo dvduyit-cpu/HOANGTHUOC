@@ -1,4 +1,9 @@
-<link rel="stylesheet" href="{{ asset('css/visual-editor.css') }}?v={{ filemtime(public_path('css/visual-editor.css')) }}">
+@php($editorCssExists = is_file(public_path('css/visual-editor.css')))
+@php($editorJsExists = is_file(public_path('js/visual-editor.js')))
+@if(!$editorCssExists || !$editorJsExists)
+<div class="alert error" role="alert">Hosting đang thiếu tệp của trình chỉnh sửa. Hãy upload đầy đủ <code>public/css/visual-editor.css</code> và <code>public/js/visual-editor.js</code> vào đúng thư mục public của Laravel.</div>
+@endif
+<link rel="stylesheet" href="{{ asset('css/visual-editor.css') }}?v={{ $editorCssExists ? filemtime(public_path('css/visual-editor.css')) : 'missing' }}">
 <div class="visual-editor-heading">
     <div><a class="back" href="{{ route('admin.content.index') }}">← Quản lý nội dung</a><h1>Chỉnh sửa giao diện</h1><p class="muted">Bấm vào chữ hoặc ảnh trên trang bên phải để chỉnh sửa. Kéo các khối để đổi thứ tự.</p></div>
     <label>Trang đang chỉnh<select id="editor-page">@foreach($sections as $pageKey => $page)<option value="{{ route('admin.content.edit', $pageKey) }}" @selected($pageKey === $section)>{{ $page['title'] }}</option>@endforeach</select></label>
@@ -65,4 +70,4 @@
     @if($images->isEmpty())<p>Chưa có ảnh trong kho. Đóng thư viện và chọn “Tải ảnh mới” ở bảng chỉnh sửa.</p>@endif
 </dialog>
 <script id="visual-editor-config" type="application/json">{!! json_encode(['blocks' => $blocks, 'section' => $section], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
-<script src="{{ asset('js/visual-editor.js') }}?v={{ filemtime(public_path('js/visual-editor.js')) }}" defer></script>
+<script src="{{ asset('js/visual-editor.js') }}?v={{ $editorJsExists ? filemtime(public_path('js/visual-editor.js')) : 'missing' }}" defer></script>

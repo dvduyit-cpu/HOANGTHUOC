@@ -113,4 +113,61 @@ class VisualEditorTest extends TestCase
             ->assertSessionHasNoErrors();
         $this->get('/')->assertDontSee('object-position: 0% 75% !important;', false);
     }
+
+    public function test_missing_editor_assets_show_a_deployment_message_instead_of_500(): void
+    {
+        $this->admin();
+        $originalPublicPath = public_path();
+        $temporaryPublicPath = storage_path('framework/testing/editor-public-'.bin2hex(random_bytes(5)));
+        foreach (['css/admin-workspace.css', 'js/admin-workspace.js', 'css/admin-navigation.css', 'css/admin-content.css', 'js/password-toggle.js'] as $asset) {
+            \Illuminate\Support\Facades\File::ensureDirectoryExists(dirname($temporaryPublicPath.'/'.$asset));
+            file_put_contents($temporaryPublicPath.'/'.$asset, '');
+        }
+        try {
+            app()->usePublicPath($temporaryPublicPath);
+            $this->get('/admin/noi-dung/trang-chu')->assertOk()
+                ->assertSee('Hosting đang thiếu tệp của trình chỉnh sửa.')
+                ->assertSee('public/css/visual-editor.css');
+        } finally {
+            app()->usePublicPath($originalPublicPath);
+            \Illuminate\Support\Facades\File::deleteDirectory($temporaryPublicPath);
+        }
+    }
+
+    public function test_mysql_text_limit_returns_an_actionable_message_and_rolls_back(): void
+    {
+        $this->admin();
+        SiteSetting::putMany(['home_title_vi' => 'Published before error']);
+        SiteSetting::saving(function (SiteSetting $setting) {
+            if ($setting->key === 'content_history_trang-chu') {
+                $cause = new \PDOException('Data too long for column value', 22001);
+                $cause->errorInfo = ['22001', 1406, 'Data too long for column value'];
+                throw new \Illuminate\Database\QueryException('mysql', 'insert into site_settings', [], $cause);
+            }
+        });
+        try {
+            $this->from('/admin/noi-dung/trang-chu')->put('/admin/noi-dung/trang-chu', [
+                'settings' => ['home_title_vi' => 'Unsaved change'],
+            ])->assertRedirect('/admin/noi-dung/trang-chu')->assertSessionHasErrors('settings')
+                ->assertSessionHasInput('settings.home_title_vi', 'Unsaved change');
+            $this->assertSame('Published before error', SiteSetting::values()['home_title_vi']);
+            $this->assertArrayNotHasKey('content_history_trang-chu', SiteSetting::values());
+        } finally {
+            \Illuminate\Support\Facades\Event::forget('eloquent.saving: '.SiteSetting::class);
+        }
+    }
+
+    public function test_large_draft_and_history_values_are_preserved(): void
+    {
+        $this->admin();
+        $body = str_repeat('Nội dung y khoa. ', 900);
+        $settings = array_fill_keys(['home_body_vi', 'home_body_en', 'home_intro_body_vi', 'home_intro_body_en', 'culture_body_vi', 'culture_body_en'], $body);
+        $this->post('/admin/noi-dung/trang-chu/draft', ['settings' => $settings])->assertSessionHasNoErrors();
+        $this->assertGreaterThan(65535, strlen(SiteSetting::values()['content_draft_trang-chu']));
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => $settings])->assertSessionHasNoErrors();
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => ['home_title_vi' => 'Next version']])->assertSessionHasNoErrors();
+        $historyJson = SiteSetting::values()['content_history_trang-chu'];
+        $this->assertGreaterThan(65535, strlen($historyJson));
+        $this->assertSame(trim($body), json_decode($historyJson, true)[0]['settings']['home_body_vi']);
+    }
 }
