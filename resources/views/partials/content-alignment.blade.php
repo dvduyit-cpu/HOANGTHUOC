@@ -36,5 +36,4 @@
         @endif
     @endif
 @endforeach
-    #about-story-heading { text-align: left; }
 </style>

@@ -1,28 +1,5 @@
 @extends('layouts.admin')
 @section('title', $sectionData['title'])
 @section('content')
-<div class="page-head"><div><a class="back" href="{{ route('admin.content.index') }}">← Quản lý nội dung</a><h1>{{ $sectionData['title'] }}</h1><p class="muted">{{ $sectionData['description'] }}</p></div><a class="btn" href="{{ route($sectionData['route']) }}" target="_blank" rel="noopener">Xem trang này</a></div>
-<p class="muted">Nhập tiếng Việt và bản tiếng Anh tương ứng. Khách chọn EN / VI để đổi ngôn ngữ ngay trên website. Nội dung mới cần có bản tiếng Anh để hiển thị đầy đủ.</p>
-@if($section === 'gioi-thieu')<p><a class="btn" href="{{ route('admin.products.index') }}">Quản lý ảnh slider Giải pháp y khoa →</a></p>@endif
-@if($section === 'doi-ngu')
-<p class="muted">Khối 1: ảnh bên trái, chữ bên phải — sửa ảnh ở mục “Khối 1”, sửa chữ ở các mục “TỪ NIỀM TIN ĐẾN SỨ MỆNH”, “Trách nhiệm với từng nhịp tim” và ba đoạn nội dung tiếp theo. Khối 2: chữ bên trái, ảnh bên phải — sửa tại các mục “Khối 2”. Mỗi ảnh có thể chọn từ kho hoặc tải ảnh mới. Nhấn “Lưu thay đổi” để công khai.</p>
-@endif
-<link rel="stylesheet" href="{{ asset('css/content-preview.css') }}?v={{ filemtime(public_path('css/content-preview.css')) }}">
-<div class="content-editor">
-<form id="content-editor-form" class="admin-settings" data-preview-url="{{ route('admin.content.preview', $section) }}" method="post" enctype="multipart/form-data" action="{{ route('admin.content.update', $section) }}">@csrf @method('PUT')
-<section class="settings-group settings-section"><div class="form-grid">@foreach($fields as $key => $field)<label class="{{ $field[1] === 'textarea' ? 'span-2' : '' }}">{{ $field[0] }}@if($field[1] === 'image')<select name="settings[{{ $key }}]"><option value="">Chưa chọn ảnh</option>@foreach($images as $image)<option value="{{ $image['path'] }}" @selected(old('settings.'.$key, $settings[$key] ?? '') === $image['path'])>{{ basename($image['path']) }}</option>@endforeach</select>@php($chosenImage = old('settings.'.$key, $settings[$key] ?? ''))
-@if($chosenImage)<img src="{{ asset('storage/'.$chosenImage) }}" alt="Ảnh đang chọn" style="width:100%;max-width:260px;height:150px;object-fit:cover;margin:10px 0">@endif
-<span>Tải ảnh mới (tối đa 5 MB)</span><input type="file" name="uploads[{{ $key }}]" accept="image/jpeg,image/png,image/webp,image/gif"><small>Chọn ảnh trong kho hoặc tải ảnh mới. Ảnh tải mới sẽ được ưu tiên. Để trống lựa chọn để dùng ảnh mặc định / ẩn ảnh.</small>@elseif($field[1] === 'product_layout')@include('admin.content.product-layout-field')@elseif($field[1] === 'alignment')@include('admin.content.alignment-field')@elseif($field[1] === 'checkbox')<input type="hidden" name="settings[{{ $key }}]" value="0"><input type="checkbox" name="settings[{{ $key }}]" value="1" @checked((string) old('settings.'.$key, $settings[$key] ?? '0') === '1')>@elseif($field[1] === 'toggle')<select name="settings[{{ $key }}]"><option value="1" @selected((string) old('settings.'.$key, $settings[$key] ?? '1') === '1')>Bật</option><option value="0" @selected((string) old('settings.'.$key, $settings[$key] ?? '1') === '0')>Tắt</option></select>@elseif($field[1] === 'color')@include('admin.content.color-field')@elseif($field[1] === 'textarea')<textarea name="settings[{{ $key }}]" rows="4">{{ old('settings.'.$key, $settings[$key] ?? '') }}</textarea>@else<input type="{{ $field[1] }}" @if($field[1] === 'number') min="8" max="96" step="1" @endif name="settings[{{ $key }}]" value="{{ old('settings.'.$key, $settings[$key] ?? '') }}">@endif</label>@endforeach</div></section>
-@if($errors->any())<div class="alert error"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
-<div class="editor-save"><small>Chỉnh nội dung bên trên và kiểm tra bản xem trước.</small>
-@if($section === 'mau-sac')<button class="ghost-btn" type="button" id="reset-website-colors">Khôi phục màu mặc định</button>@endif
-<button class="btn" type="submit">Lưu thay đổi</button></div></form>
-<aside class="content-preview" aria-label="Xem trước website">
-    <div class="preview-toolbar"><strong>Xem trước website</strong><select id="preview-locale" aria-label="Ngôn ngữ xem trước"><option value="vi">Tiếng Việt</option><option value="en">English</option></select><select id="preview-device" aria-label="Kích thước xem trước"><option value="desktop">Máy tính</option><option value="mobile">Điện thoại</option></select></div>
-    <p id="preview-status" role="status">Đang tải bản xem trước…</p>
-    <small>Nội dung chỉ được công khai khi bấm Lưu thay đổi. Ảnh tải mới hiển thị sau khi lưu.</small>
-    <div class="preview-viewport"><iframe id="content-preview-frame" title="Bản xem trước website" sandbox="allow-same-origin" src="about:blank"></iframe></div>
-</aside>
-</div>
-<script src="{{ asset('js/content-preview.js') }}" defer></script>
+@include('admin.content.visual-editor')
 @endsection

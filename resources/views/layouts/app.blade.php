@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="{{ asset('css/contact.css') }}?v={{ filemtime(public_path('css/contact.css')) }}">
 @endif
 @include('partials.content-alignment')
+@include('partials.visual-page-style')
 <script defer src="{{ asset('js/product-slider.js') }}?v={{ filemtime(public_path('js/product-slider.js')) }}"></script>
 </head>
 <body>

@@ -14,7 +14,20 @@ class MediaController extends Controller
 {
     private static function usedPaths(): \Illuminate\Support\Collection
     {
+        $nestedPaths = [];
+        $walk = function ($value) use (&$walk, &$nestedPaths): void {
+            if (is_array($value)) {
+                foreach ($value as $item) $walk($item);
+            } elseif (is_string($value)) {
+                $nestedPaths[] = $value;
+            }
+        };
+        foreach (SiteSetting::values() as $value) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) $walk($decoded);
+        }
         return collect(SiteSetting::values())->values()
+            ->merge($nestedPaths)
             ->merge(\App\Support\TeamProducts::all()->pluck('image_path'))
             ->merge(\App\Support\TeamProducts::all()->pluck('gallery_paths')->flatten())
             ->merge(Job::query()->whereNotNull('image_path')->pluck('image_path'))

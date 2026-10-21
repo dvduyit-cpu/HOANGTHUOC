@@ -50,6 +50,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,editor']
     Route::get('noi-dung', [ContentController::class, 'index'])->middleware('permission:content')->name('content.index');
     Route::get('noi-dung/{section}', [ContentController::class, 'edit'])->middleware('permission:content')->name('content.edit');
     Route::put('noi-dung/{section}', [ContentController::class, 'update'])->middleware('permission:content')->name('content.update');
+    Route::post('noi-dung/{section}/draft', [ContentController::class, 'draft'])->middleware('permission:content')->name('content.draft');
+    Route::delete('noi-dung/{section}/draft', [ContentController::class, 'discardDraft'])->middleware('permission:content')->name('content.discard-draft');
+    Route::post('noi-dung/{section}/restore', [ContentController::class, 'restore'])->middleware('permission:content')->name('content.restore');
     Route::post('noi-dung/{section}/preview', [ContentController::class, 'preview'])->middleware('permission:content')->name('content.preview');
     Route::middleware('permission:applications')->group(function () {
         Route::get('applications', [AdminApplicationController::class, 'index'])->name('applications.index');

@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Support\VisualEditor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ContentController extends Controller
 {
@@ -19,30 +23,105 @@ class ContentController extends Controller
     {
         abort_unless(array_key_exists($section, $this->sections()), 404);
 
+        $published = SiteSetting::values();
+        $draft = json_decode($published['content_draft_'.$section] ?? 'null', true);
+        $settings = array_replace(\App\Support\PageContent::defaults(), $published, is_array($draft) ? ($draft['settings'] ?? []) : []);
         return view('admin.content.edit', [
-            'settings' => array_replace(\App\Support\PageContent::defaults(), SiteSetting::values()),
+            'settings' => $settings,
             'images' => MediaController::images(),
             'section' => $section,
             'sectionData' => $this->sections()[$section],
             'fields' => $this->fieldsFor($section),
+            'sections' => $this->sections(),
+            'blocks' => VisualEditor::blocks($section),
+            'layout' => VisualEditor::layout($section, array_replace($settings, session()->getOldInput('settings', []))),
+            'draft' => $draft,
+            'history' => json_decode($published['content_history_'.$section] ?? '[]', true) ?: [],
         ]);
     }
 
     public function update(Request $request, string $section): RedirectResponse
+    {
+        return $this->saveContent($request, $section, $request->input('intent') === 'draft');
+    }
+
+    public function draft(Request $request, string $section): RedirectResponse
+    {
+        return $this->saveContent($request, $section, true);
+    }
+
+    private function saveContent(Request $request, string $section, bool $draft): RedirectResponse
     {
         abort_unless(array_key_exists($section, $this->sections()), 404);
 
         $fields = $this->fieldsFor($section);
         $data = $request->validate($this->contentRules($fields));
         $values = $data['settings'] ?? [];
-        foreach ($fields as $key => $field) {
-            if ($field[1] === 'image' && $request->hasFile('uploads.'.$key)) {
-                $values[$key] = $request->file('uploads.'.$key)->store('media/'.now()->timezone('Asia/Bangkok')->format('Y'), 'public');
+        $uploadedPaths = [];
+        try {
+            foreach ($fields as $key => $field) {
+                if ($field[1] === 'image' && $request->hasFile('uploads.'.$key)) {
+                    $values[$key] = $request->file('uploads.'.$key)->store('media/'.now()->timezone('Asia/Bangkok')->format('Y'), 'public');
+                    $uploadedPaths[] = $values[$key];
+                }
             }
+            DB::transaction(function () use ($section, $values, $fields, $draft) {
+                if ($draft) {
+                    $existing = json_decode(SiteSetting::values()['content_draft_'.$section] ?? '[]', true);
+                    SiteSetting::putMany(['content_draft_'.$section => json_encode([
+                        'settings' => array_replace($existing['settings'] ?? [], $values),
+                        'saved_at' => now()->toIso8601String(),
+                    ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)]);
+                } else {
+                    $this->rememberVersion($section, $fields);
+                    SiteSetting::putMany($values);
+                    SiteSetting::where('key', 'content_draft_'.$section)->delete();
+                }
+            });
+        } catch (\Throwable $exception) {
+            Storage::disk('public')->delete($uploadedPaths);
+            throw $exception;
         }
-        SiteSetting::putMany($values);
 
-        return back()->with('success', 'Đã lưu thay đổi.');
+        return back()->with('success', $draft ? 'Đã lưu nháp. Website công khai chưa thay đổi.' : 'Đã xuất bản thay đổi.');
+    }
+
+    public function discardDraft(string $section): RedirectResponse
+    {
+        abort_unless(array_key_exists($section, $this->sections()), 404);
+        SiteSetting::where('key', 'content_draft_'.$section)->delete();
+        return back()->with('success', 'Đã bỏ bản nháp, quay về nội dung đang công khai.');
+    }
+
+    public function restore(Request $request, string $section): RedirectResponse
+    {
+        abort_unless(array_key_exists($section, $this->sections()), 404);
+        $version = $request->validate(['version' => ['required', 'uuid']])['version'];
+        $history = json_decode(SiteSetting::values()['content_history_'.$section] ?? '[]', true) ?: [];
+        $snapshot = collect($history)->firstWhere('id', $version);
+        abort_unless($snapshot, 404);
+        $fields = $this->fieldsFor($section);
+        // Restore as a draft so the customer can review it before publishing.
+        $values = array_intersect_key($snapshot['settings'], $fields);
+        SiteSetting::putMany(['content_draft_'.$section => json_encode([
+            'settings' => $values, 'saved_at' => now()->toIso8601String(),
+        ], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)]);
+        return back()->with('success', 'Đã đưa phiên bản cũ vào bản nháp. Kiểm tra rồi bấm Xuất bản để áp dụng.');
+    }
+
+    private function rememberVersion(string $section, array $fields): void
+    {
+        $saved = SiteSetting::values();
+        $defaults = \App\Support\PageContent::defaults();
+        $snapshot = [];
+        foreach ($fields as $key => $field) {
+            $snapshot[$key] = $saved[$key] ?? $defaults[$key] ?? match ($field[1]) {
+                'alignment' => 'inherit', 'checkbox' => '0', 'toggle' => '1', 'product_layout' => 'three', default => '',
+            };
+        }
+        $history = json_decode($saved['content_history_'.$section] ?? '[]', true) ?: [];
+        array_unshift($history, ['id' => (string) Str::uuid(), 'saved_at' => now()->toIso8601String(), 'settings' => $snapshot]);
+        SiteSetting::putMany(['content_history_'.$section => json_encode(array_slice($history, 0, 15), JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)]);
     }
 
     public function preview(Request $request, string $section): \Illuminate\Http\Response
@@ -67,9 +146,10 @@ class ContentController extends Controller
     private function contentRules(array $fields): array
     {
         $rules = [];
+        $imagePaths = MediaController::images()->pluck('path')->all();
         foreach ($fields as $key => $field) {
             $rules['settings.'.$key] = $field[1] === 'image'
-                ? ['nullable', 'string', \Illuminate\Validation\Rule::in(MediaController::images()->pluck('path')->all())]
+                ? ['nullable', 'string', \Illuminate\Validation\Rule::in($imagePaths)]
                 : ['nullable', 'string', 'max:20000'];
             if (in_array($field[1], ['toggle', 'checkbox'], true)) {
                 $rules['settings.'.$key] = ['sometimes', 'required', 'in:0,1'];
@@ -86,6 +166,25 @@ class ContentController extends Controller
             if ($field[1] === 'color') {
                 $rules['settings.'.$key] = ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'];
             }
+            if ($field[1] === 'text_color') {
+                $rules['settings.'.$key] = ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'];
+            }
+            if ($field[1] === 'layout') {
+                $allowed = array_keys(VisualEditor::blocks($field[2]));
+                $rules['settings.'.$key] = ['nullable', 'string', 'max:10000', function ($attribute, $value, $fail) use ($allowed) {
+                    $items = json_decode($value, true);
+                    if (!is_array($items) || !array_is_list($items) || count($items) !== count($allowed)) {
+                        $fail('Bố cục trang không hợp lệ.'); return;
+                    }
+                    $ids = [];
+                    foreach ($items as $item) {
+                        if (!is_array($item) || !in_array($item['id'] ?? null, $allowed, true) || !is_bool($item['visible'] ?? null) || in_array($item['id'], $ids, true)) {
+                            $fail('Bố cục trang không hợp lệ.'); return;
+                        }
+                        $ids[] = $item['id'];
+                    }
+                }];
+            }
             if ($field[1] === 'image') {
                 $rules['uploads.'.$key] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'];
             }
@@ -99,7 +198,7 @@ class ContentController extends Controller
             'thuong-hieu' => ['title' => 'Thương hiệu & doanh nghiệp', 'description' => 'Tên thương hiệu, thông tin pháp lý và nội dung hiển thị ở chân trang.', 'fields' => ['company_name', 'company_legal_name', 'company_email', 'company_phone', 'company_tax_id', 'company_address_vi', 'company_address_en', 'footer_description_vi', 'footer_description_en']],
             'trang-chu' => ['title' => 'Nội dung trang chủ', 'description' => 'Chỉnh sửa banner, phần giới thiệu và văn hóa doanh nghiệp trên trang chủ.', 'fields' => ['culture_image', 'home_eyebrow_vi', 'home_eyebrow_en', 'home_title_vi', 'home_title_en', 'home_body_vi', 'home_body_en', 'home_intro_title_vi', 'home_intro_title_en', 'home_intro_body_vi', 'home_intro_body_en', 'culture_eyebrow_vi', 'culture_eyebrow_en', 'culture_title_vi', 'culture_title_en', 'culture_body_vi', 'culture_body_en']],
             'doi-ngu' => ['title' => 'Đội ngũ', 'description' => 'Chỉnh sửa ảnh chân dung, ảnh đội ngũ và mô tả bên trên Hành trình phát triển.', 'fields' => ['team_portrait_image']],
-            'gioi-thieu' => ['title' => 'Nội dung trang giới thiệu', 'description' => 'Chỉnh sửa thông điệp và câu chuyện thương hiệu trên trang Giới thiệu.', 'fields' => ['about_eyebrow_vi', 'about_eyebrow_en', 'about_title_vi', 'about_title_en', 'about_body_vi', 'about_body_en', 'about_story_title_vi', 'about_story_title_en']],
+            'gioi-thieu' => ['title' => 'Nội dung trang giới thiệu', 'description' => 'Chỉnh sửa thông điệp và câu chuyện thương hiệu trên trang Giới thiệu.', 'fields' => ['about_eyebrow_vi', 'about_eyebrow_en', 'about_title_vi', 'about_title_en', 'about_body_vi', 'about_body_en', 'about_story_title_vi', 'about_story_title_en', 'team_block_10_vi', 'team_block_11_vi', 'team_block_12_vi']],
             'lien-he' => ['title' => 'Nội dung trang liên hệ', 'description' => 'Chỉnh sửa lời chào và phần mô tả ở trang Liên hệ.', 'fields' => ['contact_title_vi', 'contact_title_en', 'contact_body_vi', 'contact_body_en']],
         ];
         foreach (['tuyen-dung' => 'Trang tuyển dụng', 'tin-tuc' => 'Trang tin tức', 'mau-sac' => 'Màu sắc website'] as $key => $title) {
@@ -139,7 +238,12 @@ class ContentController extends Controller
         foreach ($result as $key => $field) {
             if (in_array($field[1], ['text', 'textarea'], true) && !str_ends_with($key, '_en')) {
                 $result[$key.'_alignment'] = ['Canh chữ: '.$field[0], 'alignment'];
+                $result[$key.'_font_size'] = ['Cỡ chữ (px): '.$field[0], 'number'];
+                $result[$key.'_text_color'] = ['Màu chữ: '.$field[0], 'text_color'];
             }
+        }
+        if (VisualEditor::blocks($section)) {
+            $result['page_layout_'.$section] = ['Bố cục trang', 'layout', $section];
         }
         return $result;
     }
