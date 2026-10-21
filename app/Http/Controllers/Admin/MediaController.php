@@ -16,6 +16,7 @@ class MediaController extends Controller
     {
         return collect(SiteSetting::values())->values()
             ->merge(\App\Support\TeamProducts::all()->pluck('image_path'))
+            ->merge(\App\Support\TeamProducts::all()->pluck('gallery_paths')->flatten())
             ->merge(Job::query()->whereNotNull('image_path')->pluck('image_path'))
             ->merge(News::query()->whereNotNull('cover_image')->pluck('cover_image'))
             ->filter()->unique();

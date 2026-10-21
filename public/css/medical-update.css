@@ -1,4 +1,31 @@
 /* Editorial revision from the October 2026 company proposal. */
+.page-hero.editable-hero.section-banner{display:flex;align-items:center;min-height:280px!important;padding:40px 0!important;background:#102f43}
+.page-hero.editable-hero.section-banner>.editable-hero-image{z-index:0;object-position:center 45%}
+.page-hero.editable-hero.section-banner:before{z-index:1;background:linear-gradient(90deg,rgba(16,47,67,.88),rgba(16,47,67,.58) 60%,rgba(16,47,67,.48))}
+.page-hero.editable-hero.section-banner>.container{position:relative;z-index:2}
+.section-banner .eyebrow{display:block;color:#fff;letter-spacing:.1em;font-weight:800;margin-bottom:14px}
+.page-hero.section-banner h1{max-width:720px;color:#fff;font-weight:700;line-height:1.3!important;margin:0!important}
+.careers-intro,.news-intro{padding-top:42px}
+.careers-intro p,.news-intro p{font-size:16px;line-height:1.95;color:var(--web-text,#597180);margin:0 0 20px}
+.careers-intro+.positions-section,.news-intro+.news-grid{padding-top:32px}
+@media(max-width:600px){.page-hero.editable-hero.section-banner{min-height:240px!important;padding:32px 0!important}.section-banner .eyebrow{font-size:10px}.careers-intro,.news-intro{padding-top:30px}}
+.about-story.about-story-photo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:60px;align-items:center}
+.about-story-image{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px}
+.about-story-photo h2{font-size:clamp(32px,3.7vw,50px);line-height:1.35;margin:0 0 28px}
+.about-story-photo p{font-size:16px;line-height:1.95}
+.about-story-photo>*{min-width:0}
+.ecg-timeline path{stroke-width:5!important;stroke:#ad142c!important;stroke-linecap:round;stroke-linejoin:round}
+.product-slider .product-slider-track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 48px)/3);grid-template-columns:none;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding:4px 0 16px}
+.product-slider .team-product-card,.product-slider .team-product-card:only-child{grid-column:auto;scroll-snap-align:start;min-width:0}
+.product-slider .product-slider-track:has(>.team-product-card:only-child){grid-auto-columns:100%}
+.product-slider-controls{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
+.product-slider-controls[hidden]{display:none}
+.product-slider-controls button{width:44px;height:44px;border:1px solid #c4d8e2;border-radius:50%;background:#fff;color:#146a9b;font-size:22px;cursor:pointer}
+.product-slider-controls button:hover{background:#edf6fa}
+.product-slider-controls button:disabled{opacity:.35;cursor:default}
+.product-slider button:focus-visible,.product-slider-track:focus-visible{outline:3px solid #36a6d0;outline-offset:3px}
+@media(max-width:800px){.about-story.about-story-photo{grid-template-columns:1fr;gap:30px}.product-slider .product-slider-track{grid-auto-columns:calc((100% - 24px)/2)}}
+@media(max-width:550px){.product-slider .product-slider-track{grid-auto-columns:88%}}
 .team-product-card:only-child{grid-column:1/-1}.team-product-card:only-child img{height:auto;max-height:none;display:block}.about-products h2{font-size:clamp(28px,3.5vw,44px);line-height:1.4}
 .team-products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:32px}.team-product-card{border:1px solid #dce7eb;border-radius:8px;overflow:hidden;background:#fff;padding:20px}.team-product-card img{width:100%;height:220px;object-fit:contain}.team-product-card h3{font-size:20px;color:#173e53;line-height:1.5;margin:20px 0 12px;overflow-wrap:anywhere}.team-product-card p{white-space:pre-line;overflow-wrap:anywhere;font-size:14px}.team-products:empty{display:none}@media(max-width:800px){.team-products{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.team-products{grid-template-columns:1fr}}
 .editable-hero{position:relative;isolation:isolate;overflow:hidden}.editable-hero-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}.editable-hero:has(.editable-hero-image):before{content:"";position:absolute;inset:0;background:#0d2f49c9;z-index:-1}.editable-hero:has(.editable-hero-image) h1,.editable-hero:has(.editable-hero-image) p,.editable-hero:has(.editable-hero-image) .eyebrow{color:white!important}.product-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px;margin-top:30px}.product-gallery img{width:100%;height:240px;object-fit:contain;border:1px solid #dce7eb;border-radius:6px;background:white}.team-story p{white-space:pre-line}
@@ -21,3 +48,28 @@ main h1,main h2{white-space:pre-line;text-wrap:balance}main p{text-wrap:pretty}
 .team-story .team-portrait{flex-shrink:0}.team-group-copy{min-width:0}.team-group-copy h2{font-size:clamp(28px,3.5vw,44px);line-height:1.4;margin:16px 0 25px}
 .team-story,.team-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;align-items:center}.team-story>div,.team-group-copy{max-width:none;min-width:0}.team-story .team-portrait,.team-group .team-group-image{display:block;width:100%;max-width:none;height:auto;max-height:none;aspect-ratio:4/3;object-fit:cover;border-radius:6px}.team-story p,.team-group-description{font-size:16px;line-height:1.95}@media(max-width:800px){.team-story,.team-group{grid-template-columns:minmax(0,1fr);gap:28px}.team-story .team-portrait,.team-group .team-group-image{width:100%;max-width:none;aspect-ratio:4/3}}
 .section.team-story{padding-bottom:24px}.section.team-story+.section.team-group{padding-top:24px;align-items:start}.team-story>div>p:last-child{margin-bottom:0}@media(max-width:800px){.section.team-story{padding-bottom:18px}.section.team-story+.section.team-group{padding-top:18px}}
+
+/* Show one complete medical illustration at a time, including portrait artwork. */
+.about-products .product-slider .product-slider-track{grid-auto-columns:100%;scroll-snap-type:x mandatory;gap:24px}
+.about-products .product-slider .team-product-card{padding:18px;text-align:center}
+.about-products .product-slider .product-image-link{display:flex;align-items:center;justify-content:center;background:#f4f6f8;border-radius:6px;overflow:hidden}
+.about-products .product-slider .team-product-card img,.about-products .product-slider .team-product-card:only-child img{display:block;width:100%;height:clamp(360px,72vh,800px);max-height:none;object-fit:contain;margin:0}
+.about-products .product-slider-controls{align-items:center;justify-content:center}
+.about-products [data-slide-counter]{min-width:65px;text-align:center;color:#173e53;font-variant-numeric:tabular-nums}
+@media(max-width:550px){.about-products .product-slider .team-product-card{padding:8px}.about-products .product-slider .team-product-card img,.about-products .product-slider .team-product-card:only-child img{height:65vh}}
+.about-products .product-slider--three .product-slider-track{grid-auto-columns:calc((100% - 48px)/3)}
+.about-products .product-slider--three .team-product-card img,.about-products .product-slider--three .team-product-card:only-child img{height:clamp(300px,36vw,520px)}
+.about-products .product-slider--three .team-product-card{padding:12px}
+@media(max-width:800px){.about-products .product-slider--three .product-slider-track{grid-auto-columns:calc((100% - 24px)/2)}}
+@media(max-width:550px){.about-products .product-slider--three .product-slider-track{grid-auto-columns:88%}.about-products .product-slider--three .team-product-card img{height:440px;max-height:65vh}}
+.about-products .product-slider .product-slider-track{padding-top:12px;padding-bottom:28px}
+.about-products .team-product-card{transition:opacity 1s ease var(--reveal-delay,0ms),transform 1s cubic-bezier(.2,.65,.3,1) var(--reveal-delay,0ms),translate .3s ease,box-shadow .3s ease,border-color .3s ease,background-color .3s ease}
+.about-products .team-product-card h3{transition:color .3s ease}
+.about-products .team-product-card img{transition:filter .3s ease}
+.about-products .team-product-card:focus-within{translate:0 -6px;border-color:#78b9d7;box-shadow:0 10px 24px #103e591a}
+@media(hover:hover) and (pointer:fine){
+    .about-products .team-product-card:hover{translate:0 -6px;border-color:#78b9d7;background-color:#f7fbfd;box-shadow:0 10px 24px #103e591a}
+    .about-products .team-product-card:hover h3{color:var(--web-primary,#146a9b)}
+    .about-products .team-product-card:hover img{filter:brightness(1.03) saturate(1.06)}
+}
+@media(prefers-reduced-motion:reduce){.about-products .team-product-card,.about-products .team-product-card img,.about-products .team-product-card h3{transition:none}.about-products .team-product-card:hover,.about-products .team-product-card:focus-within{translate:none}}

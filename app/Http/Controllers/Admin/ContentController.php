@@ -71,11 +71,17 @@ class ContentController extends Controller
             $rules['settings.'.$key] = $field[1] === 'image'
                 ? ['nullable', 'string', \Illuminate\Validation\Rule::in(MediaController::images()->pluck('path')->all())]
                 : ['nullable', 'string', 'max:20000'];
-            if ($field[1] === 'toggle') {
+            if (in_array($field[1], ['toggle', 'checkbox'], true)) {
                 $rules['settings.'.$key] = ['sometimes', 'required', 'in:0,1'];
             }
             if ($field[1] === 'number') {
                 $rules['settings.'.$key] = ['nullable', 'integer', 'between:8,96'];
+            }
+            if ($field[1] === 'alignment') {
+                $rules['settings.'.$key] = ['nullable', 'in:inherit,left,center,right,justify'];
+            }
+            if ($field[1] === 'product_layout') {
+                $rules['settings.'.$key] = ['sometimes', 'required', 'in:single,three'];
             }
             if ($field[1] === 'color') {
                 $rules['settings.'.$key] = ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'];
@@ -127,6 +133,12 @@ class ContentController extends Controller
             if (str_ends_with($key, '_vi') && in_array($fields[$key][1], ['text', 'textarea'], true)) {
                 $englishKey = substr($key, 0, -3).'_en';
                 $result[$englishKey] = [$fields[$key][0].' — English', $fields[$key][1]];
+            }
+        }
+        $result['content_alignment_'.$section] = ['Canh chữ mặc định cho toàn trang', 'alignment'];
+        foreach ($result as $key => $field) {
+            if (in_array($field[1], ['text', 'textarea'], true) && !str_ends_with($key, '_en')) {
+                $result[$key.'_alignment'] = ['Canh chữ: '.$field[0], 'alignment'];
             }
         }
         return $result;

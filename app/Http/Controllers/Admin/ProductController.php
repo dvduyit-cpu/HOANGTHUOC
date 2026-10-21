@@ -47,13 +47,22 @@ class ProductController extends Controller
             'description_en' => ['nullable', 'string', 'max:5000'],
             'image_path' => ['nullable', 'string', Rule::in(MediaController::images()->pluck('path')->all())],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
+            'gallery_paths' => ['sometimes', 'array', 'max:20'],
+            'gallery_paths.*' => ['nullable', 'string', Rule::in(MediaController::images()->pluck('path')->all())],
+            'images' => ['nullable', 'array', 'max:20'],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:5120'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:99999'],
             'is_published' => ['required', 'boolean'],
         ]);
-        unset($data['image']);
+        unset($data['image'], $data['images']);
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('media/'.now()->timezone('Asia/Bangkok')->format('Y'), 'public');
         }
+        $gallery = array_filter($data['gallery_paths'] ?? (TeamProducts::all()->firstWhere('id', $id)['gallery_paths'] ?? []));
+        foreach ($request->file('images', []) as $image) {
+            $gallery[] = $image->store('media/'.now()->timezone('Asia/Bangkok')->format('Y'), 'public');
+        }
+        $data['gallery_paths'] = array_values(array_unique($gallery));
         SiteSetting::putMany([TeamProducts::PREFIX.$id => json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)]);
 
         return redirect()->route('admin.products.index')->with('success', 'Đã lưu sản phẩm.');

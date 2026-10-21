@@ -3,7 +3,10 @@ main{animation:site-enter .4s ease-out both}
 @keyframes site-enter{from{opacity:.7}to{opacity:1}}
 .site-header{transition:box-shadow .25s ease,background-color .25s ease}
 .site-header.is-scrolled{background:#fffffff5;box-shadow:0 5px 24px #0d273a14}
-.site-reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.65,.3,1);transition-delay:var(--reveal-delay,0ms)}
+.site-reveal{opacity:0;transform:translateY(22px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.65,.3,1);transition-delay:var(--reveal-delay,0ms)}
+.site-reveal.site-reveal-from-left{transform:translateX(-65px);transition-duration:1.2s}
+.site-reveal.site-reveal-from-right{transform:translateX(65px);transition-duration:1.2s}
+.site-reveal.site-reveal-from-left.is-visible,.site-reveal.site-reveal-from-right.is-visible,.site-reveal.site-reveal-from-left:focus-within,.site-reveal.site-reveal-from-right:focus-within{transform:none}
 .site-reveal.is-visible,.site-reveal:focus-within{opacity:1;transform:none}
 .hp-inline-link span,.hp-text-link span,.hp-button span,.footer-contact-row svg{transition:transform .22s ease}
 .hp-inline-link:hover span,.hp-text-link:hover span,.hp-button:hover span{transform:translate(3px,-2px)}
@@ -13,16 +16,33 @@ main{animation:site-enter .4s ease-out both}
 input,textarea,select{transition:border-color .2s ease,box-shadow .2s ease}
 input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #267ca3;outline-offset:2px;box-shadow:0 0 0 4px #267ca312}
 @media(hover:hover) and (pointer:fine){
-    .job-card,.news-card{transition:transform .25s ease,box-shadow .25s ease}
-    .job-card:hover,.news-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px #103e5914}
+    main :is(.job-card,.news-card,.value-grid article){transition:opacity 1s ease var(--reveal-delay,0ms),transform 1s cubic-bezier(.2,.65,.3,1) var(--reveal-delay,0ms),translate .3s ease,box-shadow .3s ease,background-color .3s ease}
+    main :is(.job-card,.news-card,.value-grid article):hover{translate:0 -5px;box-shadow:0 12px 30px #103e5914}
+    main .value-grid article:hover{background-color:#f6fbfd}
+    main :is(.team-portrait,.team-group-image,.about-story-image,.article-cover img){transition:filter .3s ease}
+    main :is(.team-portrait,.team-group-image,.about-story-image,.article-cover img):hover{filter:brightness(1.03) saturate(1.06)}
+    main h2{transition:color .3s ease,text-shadow .3s ease}
+    main h2:hover{color:var(--web-primary,#146a9b);text-shadow:0 2px 18px #146a9b18}
     .hp-values article{transition:background-color .25s ease}
     .hp-values article:hover{background-color:#f7fafb}
     .hp-button:hover,.btn:hover{box-shadow:0 7px 20px #103e591c}
 }
+main{overflow-x:clip}
 @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto!important}
     main,.site-reveal{animation:none!important;opacity:1;transform:none!important}
     *,*::before,*::after{transition:none!important;animation:none!important}
+    main :is(.job-card,.news-card,.value-grid article):hover{translate:none}
     ::view-transition-old(root),::view-transition-new(root){animation:none!important}
 }
 @media print{.site-reveal{opacity:1;transform:none}}
+.careers-hero .container>p+p{margin-top:20px}
+main .jobs-grid .job-card{transition:opacity 1s ease var(--reveal-delay,0ms),transform 1s cubic-bezier(.2,.65,.3,1) var(--reveal-delay,0ms),translate .3s ease,box-shadow .3s ease,border-color .3s ease,background-color .3s ease}
+.jobs-grid .job-card h3 a,.jobs-grid .job-card .link{transition:color .3s ease}
+@media(hover:hover) and (pointer:fine){
+    main .jobs-grid .job-card.is-visible:hover{transform:none;translate:0 -6px;border-color:#78b9d7;background-color:#f7fbfd;box-shadow:0 12px 30px #103e591a}
+    main .jobs-grid .job-card:hover h3 a,main .jobs-grid .job-card:hover .link{color:var(--web-primary,#146a9b)}
+    .careers-hero h1{transition:opacity 1.2s ease var(--reveal-delay,0ms),transform 1.2s cubic-bezier(.2,.65,.3,1) var(--reveal-delay,0ms),color .3s ease,text-shadow .3s ease}
+    .careers-hero h1:hover{color:var(--web-primary,#146a9b);text-shadow:0 2px 18px #146a9b18}
+}
+@media(prefers-reduced-motion:reduce){main .jobs-grid .job-card.is-visible:hover{translate:none}}

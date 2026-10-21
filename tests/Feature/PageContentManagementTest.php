@@ -13,6 +13,88 @@ class PageContentManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_about_story_image_is_independent_of_hero_and_duplicate_label_is_removed(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $this->put('/admin/noi-dung/gioi-thieu', ['uploads' => [
+            'about_hero_image' => UploadedFile::fake()->image('hero.jpg'),
+            'about_story_image' => UploadedFile::fake()->image('story.jpg'),
+        ]])->assertSessionHasNoErrors();
+        $values = SiteSetting::values();
+        $heroPath = $values['about_hero_image'];
+        $storyPath = $values['about_story_image'];
+        $this->assertNotSame($heroPath, $storyPath);
+        Storage::disk('public')->assertExists($storyPath);
+        $this->get('/gioi-thieu')->assertOk()
+            ->assertSee(asset('storage/'.$heroPath), false)
+            ->assertSee('class="about-story-image" data-content-keys="about_story_image" src="'.asset('storage/'.$storyPath).'"', false)
+            ->assertDontSee('data-content-keys="about_block_2_vi"', false);
+        $this->put('/admin/noi-dung/gioi-thieu', ['uploads' => [
+            'about_story_image' => UploadedFile::fake()->image('replacement.jpg'),
+        ]])->assertSessionHasNoErrors();
+        $this->assertSame($heroPath, SiteSetting::values()['about_hero_image']);
+    }
+
+    public function test_text_alignment_can_be_previewed_saved_and_validated(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $settings = ['about_body_vi_alignment' => 'justify', 'content_alignment_gioi-thieu' => 'right'];
+        $this->get('/admin/noi-dung/gioi-thieu')->assertOk()
+            ->assertSee('settings[about_body_vi_alignment]', false);
+        $this->post('/admin/noi-dung/gioi-thieu/preview', [
+            'settings' => $settings, 'preview_locale' => 'vi',
+        ])->assertOk()->assertSee('[data-content-keys~="about_body_vi"] { text-align: justify; }', false);
+        $this->assertDatabaseMissing('site_settings', ['key' => 'about_body_vi_alignment']);
+        $this->put('/admin/noi-dung/gioi-thieu', ['settings' => $settings])->assertSessionHasNoErrors();
+        $this->get('/gioi-thieu')->assertOk()->assertSee('text-align: right;', false)
+            ->assertSee('[data-content-keys~="about_body_vi"] { text-align: justify; }', false);
+        $this->withSession(['locale' => 'en'])->get('/gioi-thieu')->assertOk()
+            ->assertSee('[data-content-keys~="about_body_vi"] { text-align: justify; }', false);
+        $this->put('/admin/noi-dung/gioi-thieu', ['settings' => [
+            'about_body_vi_alignment' => 'left; background:red',
+        ]])->assertSessionHasErrors('settings.about_body_vi_alignment');
+    }
+
+    public function test_standards_background_can_switch_between_white_and_photo(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+        $key = 'home_standards_white_background';
+        $this->get('/admin/noi-dung/trang-chu')->assertOk()->assertSee('type="checkbox"', false);
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => [$key => '1']])
+            ->assertSessionHasNoErrors();
+        $this->get('/')->assertOk()->assertSee('class="hp-standards-white"', false)
+            ->assertDontSee(asset('images/cardiovascular-solutions.png'), false);
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => [$key => '0']])
+            ->assertSessionHasNoErrors();
+        $this->get('/')->assertOk()->assertSee('class="hp-photo-section hp-standards-background"', false)
+            ->assertSee(asset('images/cardiovascular-solutions.png'), false);
+        $this->put('/admin/noi-dung/trang-chu', ['settings' => [$key => 'invalid']])
+            ->assertSessionHasErrors('settings.'.$key);
+    }
+
+    public function test_home_section_backgrounds_can_be_uploaded_and_removed(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));
+
+        foreach (['home_process_image', 'home_updates_image'] as $key) {
+            $this->get('/admin/noi-dung/trang-chu')->assertOk()->assertSee('settings['.$key.']', false);
+            $this->put('/admin/noi-dung/trang-chu', [
+                'uploads' => [$key => UploadedFile::fake()->image('background.jpg')],
+            ])->assertSessionHasNoErrors();
+            $path = SiteSetting::values()[$key];
+            Storage::disk('public')->assertExists($path);
+            if ($key === 'home_process_image') {
+                $this->get('/')->assertOk()->assertSee(asset('storage/'.$path), false);
+            }
+            $this->put('/admin/noi-dung/trang-chu', ['settings' => [$key => '']])
+                ->assertSessionHasNoErrors();
+            $this->assertDatabaseHas('site_settings', ['key' => $key, 'value' => '']);
+        }
+        $this->get('/')->assertOk()->assertSee(asset('images/cardiovascular-solutions.png'), false);
+    }
+
     public function test_website_colors_can_be_previewed_saved_and_validated(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin', 'is_active' => true]));

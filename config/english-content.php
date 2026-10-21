@@ -75,6 +75,7 @@ return [
     'team_stage_4_en' => 'GROWTH',
     'team_stage_5_en' => 'THE FUTURE',
     'careers_block_1_en' => 'CAREER OPPORTUNITIES',
+    'careers_eyebrow_en' => 'HOANG THUOC MEDICAL / CAREERS',
     'careers_block_2_en' => 'At Hoang Thuoc Medical, we understand that every medical device or coronary stent we deliver carries a mission to protect life. That strength begins with a professional team that acts with integrity and puts its heart into every task.',
     'careers_block_3_en' => 'Every team member helps build a sustainable healthcare ecosystem for the Mekong Delta. If you bring a desire to contribute and care deeply about your profession, Hoang Thuoc has a place for you to make a difference.',
     'careers_block_4_en' => 'CAREERS',
